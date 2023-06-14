@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-06-08T02:21:42.000Z</updated>
+  <updated>2023-06-14T01:20:34.000Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://example.com/wiki/git/"/>
+    <id>http://example.com/wiki/git/</id>
+    <published>2023-06-14T01:21:19.700Z</published>
+    <updated>2023-06-14T01:20:34.000Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li><strong>Git安装</strong></li></ol><p>（1）Git下载</p><p>核心程序</p><p><img src="media\image1.png" alt="">{width=”3.0868055555555554in” height=”0.35625in”}</p><p>（2）可视化客户端</p><p><img src="media\image2.png" alt="">{width=”3.321527777777778in”<br>height=”0.3388888888888889in”}</p><p>中文语言包</p><p><img src="media\image3.png" alt="">{width=”3.4520833333333334in”<br>height=”0.30416666666666664in”}</p><p>（3）初始化仓库</p><p><img src="media\image4.png" alt="">{width=”3.3652777777777776in” height=”1.2in”}</p><p><img src="media\image5.png" alt="">{width=”1.95625in” height=”0.34791666666666665in”}</p><p>（4）添加文件，提交文件至本地仓库</p><p><img src="media\image6.png" alt="">{width=”2.026388888888889in” height=”0.44375in”}</p><p>（5）本地删除与恢复</p><p>文件选中删除，可用以下方式还原</p><p><img src="media\image7.jpeg" alt="">{width=”4.478472222222222in”<br>height=”1.7826388888888889in”}</p><p>（6）创建分支</p><p><img src="media\image8.jpeg" alt="">{width=”4.582638888888889in”<br>height=”2.4868055555555557in”}</p><p><img src="media\image9.png" alt="">{width=”3.3041666666666667in”<br>height=”2.4868055555555557in”}</p><p>（7）分支的查看切换</p><p><img src="media\image10.jpeg" alt="">{width=”4.661111111111111in” height=”2.4in”}</p><p><img src="media\image11.png" alt="">{width=”1.8784722222222223in”<br>height=”2.321527777777778in”}<img src="media\image12.png" alt="">{width=”2.7909722222222224in”<br>height=”2.3305555555555557in”}</p><p>（8）标签的创建</p><p><img src="media\image13.jpeg" alt="">{width=”4.661111111111111in”<br>height=”2.765277777777778in”}</p><p><img src="media\image14.png" alt="">{width=”4.4in” height=”3.1909722222222223in”}</p><p>（9）切换与删除</p><p><img src="media\image15.png" alt="">{width=”4.409027777777778in”<br>height=”2.6868055555555554in”}</p><p><img src="media\image16.png" alt="">{width=”3.017361111111111in”<br>height=”2.817361111111111in”}</p><p>通过右键选中删除</p><p><strong>远程仓库</strong></p><p><img src="media\image17.png" alt="">{width=”4.582638888888889in”<br>height=”3.2263888888888888in”}</p><p><img src="media\image18.png" alt="">{width=”4.573611111111111in” height=”2.95625in”}</p><p>（1）码云账号注册</p><p><img src="media\image19.png" alt="">{width=”4.852083333333334in”<br>height=”2.921527777777778in”}</p><p>填写邮箱发送验证码,然后可以注册账号,主页如下</p><p><img src="media\image20.png" alt="">{width=”4.8in” height=”2.9305555555555554in”}</p><p>（2）创建远程仓库</p><p><img src="media\image21.png" alt="">{width=”4.7652777777777775in”<br>height=”3.026388888888889in”}</p><p>（3）把本地代码推送到远端</p><p><img src="media\image22.jpeg" alt="">{width=”3.7215277777777778in”<br>height=”2.4347222222222222in”}</p><p><img src="media\image23.png" alt="">{width=”5.7652777777777775in”<br>height=”5.069444444444445in”}</p><p>生成公钥私钥</p><p>ssh-keygen -t rsa</p><p>一直回车</p><p>会默认用户目录 .ssh 目录生成一个默认的id_rsa文件 和id_rsa.pub</p><p>密钥配置</p><p><img src="media\image24.png" alt="">{width=”4.886805555555555in”<br>height=”2.6173611111111112in”}</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Git安装&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;（1）Git下载&lt;/p&gt;
+&lt;p&gt;核心程序&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;media&#92;image1.png&quot; alt=&quot;&quot;&gt;{width=”3.0868055555555554in” h</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
