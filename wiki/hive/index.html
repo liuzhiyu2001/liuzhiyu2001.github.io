@@ -37,7 +37,7 @@
 <meta property="og:image" content="http://example.com/wiki/images/clip_image038.png">
 <meta property="og:image" content="http://example.com/wiki/images/clip_image040.png">
 <meta property="article:published_time" content="2023-06-14T04:50:15.000Z">
-<meta property="article:modified_time" content="2023-06-14T05:12:42.000Z">
+<meta property="article:modified_time" content="2023-06-14T05:17:28.000Z">
 <meta property="article:author" content="musiyu">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/wiki/images/clip_image002.png">
@@ -332,25 +332,25 @@
 <p>初始化：mysqld –initialize</p>
 <p>更改所属组：chown mysql:mysql /var/lib/mysql -R</p>
 <p>启动mysql：systemctl start mysqld.service</p>
-<p><img src="../images/clip_image010.png" alt="9858a16cfe52ad40290fa55e28c7ac2"></p>
+<p><img src="../images/clip_image010.png" alt></p>
 <p>查看临时生成的root密码：cat /var/log/mysqld.log</p>
-<p><img src="../images/clip_image012.png" alt="f96deeff1a71ab0ef4d8271d31f9175"></p>
+<p><img src="../images/clip_image012.png" alt></p>
 <p>5）修改root密码 授权远程访问 设置开机自启动</p>
-<p><img src="../images/clip_image014.png" alt="d6eb124d4590c25b5b64749d77d7cf7"></p>
+<p><img src="../images/clip_image014.png" alt></p>
 <p>修改root密码 设置为hadoop</p>
-<p><img src="../images/clip_image016.png" alt="8a3b173da0c2c7942874443a8befa78"></p>
+<p><img src="../images/clip_image016.png" alt></p>
 <p>授权</p>
 <p>use mysql;</p>
 <p>GRANT ALL PRIVILEGES ON <em>.</em> TO ‘root‘@’%’ IDENTIFIED BY ‘hadoop’ WITH GRANT OPTION;</p>
 <p>FLUSH PRIVILEGES;</p>
-<p><img src="../images/clip_image018.png" alt="1d3084441fa6948165f881a53cb02aa"></p>
+<p><img src="../images/clip_image018.png" alt></p>
 <p>mysql的启动和关闭 状态查看 （这几个命令必须记住）</p>
 <p>systemctl stop mysqld</p>
 <p>systemctl status mysqld</p>
 <p>systemctl start mysqld</p>
 <p>设置开机自动启动：systemctl enable mysqld </p>
 <p>查看是否设置自动启动成功</p>
-<p><img src="../images/clip_image020.png" alt="1ad6ed97e85b922d72e59c39a2aaffc"></p>
+<p><img src="../images/clip_image020.png" alt></p>
 <p><strong>（**</strong>2<strong><strong>）</strong></strong>Hive<strong>**的安装</strong></p>
 <p>1）上传安装包 解压</p>
 <p>tar zxvf apache-hive-3.1.2-bin.tar.gz</p>
@@ -360,7 +360,7 @@
 <p>rm -rf lib/guava-19.0.jar</p>
 <p>cp /export/server/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar</p>
 <p> ./lib/</p>
-<p><img src="../images/clip_image022.png" alt="a6b544f3e19019be5033bf694e63100"></p>
+<p><img src="../images/clip_image022.png" alt></p>
 <p>3）修改配置文件</p>
 <p>hive-env.sh</p>
 <p>cd /export/server/hive/conf</p>
@@ -369,20 +369,20 @@
 <p>export HADOOP_HOME=/export/server/hadoop</p>
 <p>export HIVE_CONF_DIR=/export/server/hive/conf</p>
 <p>export HIVE_AUX_JARS_PATH=/export/server/hive/lib</p>
-<p><img src="../images/clip_image024.png" alt="c25d9937e544f1e3dae3ab154d75f4f"></p>
-<p><img src="../images/clip_image026.png" alt="17592bb0f12829d35b16c72d8f2f5d1"></p>
+<p><img src="../images/clip_image024.png" alt></p>
+<p><img src="../images/clip_image026.png" alt></p>
 <p>hive-site.xml</p>
 <p>vim hive-site.xml</p>
 <configuration><br><br><!-- 存储元数据mysql相关配置 --><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionURL</name><br><br>​    <value>jdbc:mysql://node1:3306/hive3?createDatabaseIfNotExist=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8</value><br><br></property><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionDriverName</name><br><br>​    <value>com.mysql.jdbc.Driver</value><br><br></property><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionUserName</name><br><br>​    <value>root</value><br><br></property><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionPassword</name><br><br>​    <value>hadoop</value><br><br></property><br><br><!-- H2S运行绑定host --><br><br><property><br><br>  <name>hive.server2.thrift.bind.host</name><br><br>  <value>node1</value><br><br></property><br><br><!-- 远程模式部署metastore metastore地址 --><br><br><property><br><br>  <name>hive.metastore.uris</name><br><br>  <value>thrift://node1:9083</value><br><br></property><br><br><!-- 关闭元数据存储授权 --><br><br><property><br><br>  <name>hive.metastore.event.db.notification.api.auth</name><br><br>  <value>false</value><br><br></property><br><br></configuration>
 
 <p>4）上传mysql jdbc驱动到hive安装包lib下</p>
 <p>mysql-connector-java-5.1.32.jar</p>
-<p><img src="../images/clip_image028.png" alt="3a4dab1bba81097b499636c841b5138"></p>
+<p><img src="../images/clip_image028.png" alt></p>
 <p>5）初始化元数据</p>
 <p>cd /export/server/hive/</p>
 <p>bin/schematool -initSchema -dbType mysql -verbos</p>
 <p>初始化成功之后会在MySQL中创建74张表</p>
-<p><img src="../images/clip_image030.png" alt="41225404abf9fc57bc00444838bcee2"></p>
+<p><img src="../images/clip_image030.png" alt></p>
 <p>6）在hdfs创建hive存储目录（如存在则不用操作）</p>
 <p>hadoop fs -mkdir /tmp</p>
 <p>hadoop fs -mkdir -p /user/hive/warehouse</p>
@@ -391,17 +391,17 @@
 <p>7）启动hive</p>
 <p><strong>（**</strong>3<strong><strong>）启动</strong></strong>metastore<strong>**服务</strong> 前台启动 关闭ctrl+c</p>
 <p>/export/server/hive/bin/hive –service metastore</p>
-<p><img src="../images/clip_image032.png" alt="f43e1eb114b42423c231563857792f9"></p>
+<p><img src="../images/clip_image032.png" alt></p>
 <p>前台启动开启debug日志</p>
 <p>/export/server/hive/bin/hive –service metastore –hiveconf hive.root.logger=DEBUG,console </p>
-<p><img src="../images/clip_image034.png" alt="bb2de8abc80b0b607baba205d42c6dd"></p>
+<p><img src="../images/clip_image034.png" alt></p>
 <p>后台启动 进程挂起 关闭使用jps+ kill -9</p>
 <p>nohup /export/server/hive/bin/hive –service metastore &amp;</p>
-<p><img src="../images/clip_image036.png" alt="1e7c8e9cf08b79262078d75c94a9eb4"></p>
+<p><img src="../images/clip_image036.png" alt></p>
 <p><strong>（**</strong>4<strong><strong>）启动</strong></strong>hiveserver2<strong>**服务</strong></p>
 <p>nohup /export/server/hive/bin/hive –service hiveserver2 &amp;</p>
-<p><img src="../images/clip_image038.png" alt="0cd929d758b7242189a8df87dac7316"></p>
-<p><img src="../images/clip_image040.png" alt="de5b62560401e554a1624abbe4a9428"></p>
+<p><img src="../images/clip_image038.png" alt></p>
+<p><img src="../images/clip_image040.png" alt></p>
 <p>beeline客户端连接</p>
 <p>拷贝node1安装包到beeline客户端机器上（node3）</p>
 <p>scp -r /export/server/apache-hive-3.1.2-bin/ root@node3:/export/server/</p>
