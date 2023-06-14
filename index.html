@@ -181,12 +181,12 @@
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                1
-                <span>post</span>
+                2
+                <span>posts</span>
             </div>
             <div class="article-info-block">
-                0
-                <span>tag</span>
+                2
+                <span>tags</span>
             </div>
         </div>
         
@@ -231,11 +231,202 @@
                 <aside id="sidebar">
    
         
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            工具
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/git/">git</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/hello-world/">Hello World</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
     
     <div id="toTop" class="fa fa-angle-up"></div>
 </aside>
             
             <section id="main">
+        <article id="post-git" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/spark/" rel="tag">spark</a>, <a class="tag-link-link" href="/tags/%E6%90%AD%E5%BB%BA/" rel="tag">搭建</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/git/">
+            <time datetime="2023-06-14T02:42:55.000Z" itemprop="datePublished">2023-06-14</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/musiyu0114/git@github.com:liuzhiyu2001/liuzhiyu2001.github.io.git/raw/master/source/_posts/git.md"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/musiyu0114/git@github.com:liuzhiyu2001/liuzhiyu2001.github.io.git/edit/master/source/_posts/git.md"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/musiyu0114/git@github.com:liuzhiyu2001/liuzhiyu2001.github.io.git/commits/master/source/_posts/git.md"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/wiki/git/">git</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p></p><p><strong>（**</strong>1<strong><strong>）</strong></strong>Mysql<strong>**安装</strong></p>
+<p>1）卸载Centos7自带的mariadb</p>
+<p><img src="git.assets/clip_image002-16867109087901.png" alt="d75757231cfb17c966466820700c79a"></p>
+<p>如果出现了mariadb-libs-5.5.64-1.el7.x86_64，输入rpm -e mariadb- libs-5.5.64-1.el7.x86_64 –nodeps,在输入rpm -qa|grep mariadb，即可</p>
+<p>2）安装mysql</p>
+<p>
+                
+            
+        
+        
+            </p></div>   
+            <div class="article-more-link">
+                <a href="/wiki/git/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
         <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
