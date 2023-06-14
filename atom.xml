@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-06-14T06:57:56.000Z</updated>
+  <updated>2023-06-14T05:33:08.000Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,28 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>spark</title>
-    <link href="http://example.com/wiki/spark/"/>
-    <id>http://example.com/wiki/spark/</id>
-    <published>2023-06-14T05:40:30.000Z</published>
-    <updated>2023-06-14T06:57:56.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>（1）安装Anaconda</p><p>上传安装包 sh ./Anaconda3-2021.05-Linux-x86_64.sh</p><p><img src="/.com//clip_image002-16867215659061.png" alt="img"></p><p><img src="/.com//clip_image004-16867215659072.png" alt="img"></p><p>出现（base)即为安装成功</p><p>（2）创建虚拟环境</p><p>conda create -n pyspark python=3.8</p><p>conda activate pyspark</p><p>pip install pyhive pyspark jieba -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn</a></p><p><a href="https://pypi.tuna.tsinghua.edu.cn/simple">/simple</a></p><p>（1）修改环境变量配置Spark由如下5个环境变量需要设置</p><p>SPARK_HOME: 表示Spark安装路径在哪里 </p><p>PYSPARK_PYTHON: 表示Spark想运行Python程序, 那么去哪里找python执行器。 </p><p>JAVA_HOME: 告知Spark Java在哪里 </p><p>HADOOP_CONF_DIR: 告知Spark Hadoop的配置文件在哪里 </p><p>HADOOP_HOME: 告知Spark Hadoop安装在哪里</p><p>这5个环境变量 都需要配置在: /etc/profile中！</p><p><img src="/.com//clip_image006.jpg" alt="img"></p><p>（4）解压</p><p>解压下载的Spark安装包</p><p>tar -zxvf spark-3.2.0-bin-hadoop3.2.tgz -C /export/server/<img src="/.com//clip_image008.jpg" alt="img"></p><p>设置软连接</p><p>ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</p><p>（2）测试</p><p>bin/pyspark</p><p><img src="/.com//clip_image010.jpg" alt="img">在这个环境可以运行spark代码，如图：</p><p><img src="/.com//clip_image012.jpg" alt="img"></p><p>sc.parallelize([1,2,3,4,5]).map(lambda x: x + 1).collect()</p><p><strong>Spark StandAlone**</strong>环境部署**</p><p>在所有机器安装Python(Anaconda)，并在所有机器配置环境变量。</p><p><img src="/.com//clip_image014-16867215659073.png" alt="img"></p><p><img src="/.com//clip_image016-16867215659074.png" alt="img"></p><p>（1）配置配置文件</p><p>进入到spark的配置文件目录中, cd $SPARK_HOME/conf`</p><p>配置workers文件vi workers</p><p># 改名, 去掉后面的.template后缀</p><p>mv workers.template workers</p><p># 编辑worker文件7</p><p>vim workers</p><p># 将里面的localhost删除, 追加</p><p>node1</p><p>node2</p><p>node3</p><p>到workers文件内</p><p><img src="/.com//clip_image018.jpg" alt="img">（2）配置spark-env.sh文件</p><p># 1. 改名</p><p>mv spark-env.sh.template spark-env.sh</p><p># 2. 编辑spark-env.sh, 在底部追加如下内容</p><p>## 设置JAVA安装目录</p><p>JAVA_HOME=/export/server/jdk</p><p>## HADOOP软件配置文件目录，读取HDFS上文件和运行YARN集群</p><p>HADOOP_CONF_DIR=/export/server/hadoop/etc/hadoop</p><p>YARN_CONF_DIR=/export/server/hadoop/etc/hadoop</p><p>## 指定spark老大Master的IP和提交任务的通信端口</p><p># 告知Spark的master运行在哪个机器上</p><p>export SPARK_MASTER_HOST=node1</p><p># 告知sparkmaster的通讯端口</p><p>export SPARK_MASTER_PORT=7077</p><p># 告知spark master的 webui端口</p><p>SPARK_MASTER_WEBUI_PORT=8080</p><p># worker cpu可用核数</p><p>SPARK_WORKER_CORES=1</p><p># worker可用内存</p><p>SPARK_WORKER_MEMORY=1g</p><p># worker的工作通讯地址</p><p>SPARK_WORKER_PORT=7078</p><p># worker的 webui地址</p><p>SPARK_WORKER_WEBUI_PORT=8081</p><p>## 设置历史服务器</p><p># 配置的意思是 将spark程序运行的历史日志 存到hdfs的/sparklog文件夹中</p><p><img src="/.com//clip_image020.jpg" alt="img">SPARK_HISTORY_OPTS=”-Dspark.history.fs.logDirectory=hdfs://node1:8020/sparklog/ -Dspark.history.fs.cleaner.enabled=true”</p><p>在HDFS上创建程序运行历史记录存放的文件夹:</p><p>hadoop fs -mkdir /sparklog</p><p><img src="/.com//clip_image022.jpg" alt="img">hadoop fs -chmod 777 /sparklog</p><p>（3）配置spark-defaults.conf文件</p><p># 1. 改名</p><p>mv spark-defaults.conf.template spark-defaults.conf</p><p># 2. 修改内容, 追加如下内容</p><p># 开启spark的日期记录功能</p><p>spark.eventLog.enabled  true</p><p># 设置spark日志记录的路径</p><p>spark.eventLog.dir   hdfs://node1:8020/sparklog/ </p><p># 设置spark日志是否启动压缩</p><p>spark.eventLog.compress  true</p><p><img src="/.com//clip_image024.jpg" alt="img">（4）配置log4j.properties 文件 [可选配置]</p><p>mv log4j.properties.template log4j.properties</p><p><img src="/.com//clip_image026.jpg" alt="img">注意：将Spark安装文件夹  分发到其它的服务器</p><p>1）scp -r spark-3.1.2-bin-hadoop3.2 node2:/export/server/</p><p>2）scp -r spark-3.1.2-bin-hadoop3.2 node3:/export/server/</p><p>3）在node2和node3上 给spark安装目录增加软链接</p><p>ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</p><p><img src="/.com//clip_image028.jpg" alt="img"></p><p>（5）启动历史服务器</p><p>sbin/start-history-server.sh</p><p><img src="/.com//clip_image030.jpg" alt="img"></p><p>（6）启动Spark的Master和Worker进程</p><p>sbin/start-all.sh</p><p>sbin/start-master.sh</p><p>sbin/start-worker.sh</p><p>sbin/stop-all.sh</p><p>sbin/stop-master.sh</p><p>sbin/stop-worker.sh</p><p><img src="/.com//clip_image032.jpg" alt="img"><img src="/.com//clip_image034.jpg" alt="img"></p><p><img src="/.com//clip_image036.jpg" alt="img"></p><p>查看Master的WEB UI</p><p>连接到StandAlone集群</p><p><img src="/.com//clip_image038.jpg" alt="img"></p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href></a></li><li><a href></a></li></ul></blockquote>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;（1）安装Anaconda&lt;/p&gt;
-&lt;p&gt;上传安装包 sh ./Anaconda3-2021.05-Linux-x86_64.sh&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/.com//clip_image002-16867215659061.png&quot; alt=&quot;img&quot;&gt;&lt;/p</summary>
-      
-    
-    
-    
-    
-  </entry>
   
   <entry>
     <title>hive</title>
@@ -53,30 +31,6 @@
     <summary type="html">&lt;p&gt;&lt;strong&gt;1**&lt;/strong&gt;）&lt;strong&gt;&lt;strong&gt;Mysql&lt;/strong&gt;&lt;/strong&gt;安装**&lt;/p&gt;
 &lt;p&gt;1）卸载Centos7自带的mariadb&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;../images/clip_image002.pn</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>git</title>
-    <link href="http://example.com/wiki/git/"/>
-    <id>http://example.com/wiki/git/</id>
-    <published>2023-06-14T04:47:29.000Z</published>
-    <updated>2023-06-14T07:07:06.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>（1）Git下载</p><p>核心程序</p><p><img src="/.com//images2/clip_image002.jpg" alt></p><p>（2）可视化客户端</p><p><img src="/.com//images2/clip_image003.png" alt></p><p>中文语言包</p><p><img src="/.com//images2/clip_image005.jpg" alt></p><p>（3）初始化仓库</p><p><img src="/.com//images2/clip_image006.png" alt></p><p><img src="/.com//images2/clip_image008.jpg" alt></p><p>（4）添加文件，提交文件至本地仓库</p><p><img src="/.com//images2/clip_image010.jpg" alt></p><p>（5）本地删除与恢复</p><p>文件选中删除，可用以下方式还原</p><p><img src="/.com//images2/clip_image012.jpg" alt></p><p>（6）创建分支</p><p><img src="/.com//images2/clip_image014.jpg" alt></p><p><img src="/.com//images2/clip_image016.jpg" alt></p><p>（7）分支的查看切换</p><p><img src="/.com//images2/clip_image018.jpg" alt></p><p><img src="/.com//images2/clip_image020.jpg" alt><img src="/.com//images2/clip_image022.jpg" alt></p><p>（8）标签的创建</p><p><img src="/.com//images2/clip_image024.jpg" alt></p><p><img src="/.com//images2/clip_image026.jpg" alt></p><p>（9）切换与删除</p><p><img src="/.com//images2/clip_image028.png" alt></p><p><img src="/.com//images2/clip_image030.png" alt></p><p>通过右键选中删除</p><p><strong>远程仓库</strong></p><p><img src="/.com//images2/clip_image032.jpg" alt></p><p><img src="/.com//images2/clip_image034.jpg" alt></p><p>（1）码云账号注册</p><p><img src="/.com//images2/clip_image036.jpg" alt></p><p>填写邮箱发送验证码,然后可以注册账号,主页如下</p><p><img src="/.com//images2/clip_image038.jpg" alt></p><p>（2）创建远程仓库</p><p><img src="/.com//images2/clip_image040.jpg" alt></p><p>（3）把本地代码推送到远端</p><p><img src="/.com//images2/clip_image042.jpg" alt></p><p><img src="/.com//images2/clip_image044.jpg" alt></p><p>生成公钥私钥</p><p>ssh-keygen -t rsa</p><p>一直回车</p><p>会默认用户目录 .ssh 目录生成一个默认的id_rsa文件 和id_rsa.pub</p><p>密钥配置</p><p><img src="/.com//images2/clip_image046.jpg" alt></p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href></a></li><li><a href></a></li></ul></blockquote>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;（1）Git下载&lt;/p&gt;
-&lt;p&gt;核心程序&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/.com//images2/clip_image002.jpg&quot; alt&gt;&lt;/p&gt;
-&lt;p&gt;（2）可视化客户端&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/.com//images2/clip_image0</summary>
       
     
     
