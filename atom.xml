@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-06-14T09:02:50.000Z</updated>
+  <updated>2023-06-07T05:01:58.000Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,33 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>spark</title>
-    <link href="http://example.com/wiki/spark/"/>
-    <id>http://example.com/wiki/spark/</id>
-    <published>2023-06-14T07:54:56.000Z</published>
-    <updated>2023-06-14T09:02:50.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>（**</strong>1<strong><strong>）</strong></strong>Mysql<strong>**安装</strong></p><p>1）卸载Centos7自带的mariadb</p><p><img src="../images/1.png" alt></p><p>如果出现了mariadb-libs-5.5.64-1.el7.x86_64，输入rpm -e mariadb- libs-5.5.64-1.el7.x86_64 –nodeps,在输入rpm -qa|grep mariadb，即可</p><p>2）安装mysql</p><p>新建文件夹：mkdir /export/server/mysql</p><p>上传mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar到上述文件夹下，解压tar xvf mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar</p><p><img src="../images/2.png" alt></p><p>3）执行安装</p><p>yum -y install libaio</p><p><img src="../images/clip_image006.png" alt="abd06908317f6b5398c0a7c9ae9dd76"></p><p><img src="../images/clip_image008.png" alt="454c9144e1f21bfff12f67a83a6944a"></p><p>4）mysql初始化设置</p><p>初始化：mysqld –initialize</p><p>更改所属组：chown mysql:mysql /var/lib/mysql -R</p><p>启动mysql：systemctl start mysqld.service</p><p><img src="../images/clip_image010.png" alt="9858a16cfe52ad40290fa55e28c7ac2"></p><p>查看临时生成的root密码：cat /var/log/mysqld.log</p><p><img src="../images/clip_image012.png" alt="f96deeff1a71ab0ef4d8271d31f9175"></p><p>5）修改root密码 授权远程访问 设置开机自启动</p><p><img src="../images/clip_image014.png" alt="d6eb124d4590c25b5b64749d77d7cf7"></p><p>修改root密码 设置为hadoop</p><p><img src="../images/clip_image016.png" alt="8a3b173da0c2c7942874443a8befa78"></p><p>授权</p><p>use mysql;</p><p>GRANT ALL PRIVILEGES ON <em>.</em> TO ‘root‘@’%’ IDENTIFIED BY ‘hadoop’ WITH GRANT OPTION;</p><p>FLUSH PRIVILEGES;</p><p><img src="../images/clip_image018.png" alt="1d3084441fa6948165f881a53cb02aa"></p><p>mysql的启动和关闭 状态查看 （这几个命令必须记住）</p><p>systemctl stop mysqld</p><p>systemctl status mysqld</p><p>systemctl start mysqld</p><p>设置开机自动启动：systemctl enable mysqld </p><p>查看是否设置自动启动成功</p><p><img src="../images/clip_image020.png" alt="1ad6ed97e85b922d72e59c39a2aaffc"></p><p><strong>（**</strong>2<strong><strong>）</strong></strong>Hive<strong>**的安装</strong></p><p>1）上传安装包 解压</p><p>tar zxvf apache-hive-3.1.2-bin.tar.gz</p><p>ln -s apache-hive-3.1.2-bin hive</p><p>2）解决Hive与Hadoop之间guava版本差异</p><p>cd /export/server/hive/</p><p>rm -rf lib/guava-19.0.jar</p><p>cp /export/server/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar</p><p> ./lib/</p><p><img src="../images/clip_image022.png" alt="a6b544f3e19019be5033bf694e63100"></p><p>3）修改配置文件</p><p>hive-env.sh</p><p>cd /export/server/hive/conf</p><p>mv hive-env.sh.template hive-env.sh</p><p>vim hive-env.sh</p><p>export HADOOP_HOME=/export/server/hadoop</p><p>export HIVE_CONF_DIR=/export/server/hive/conf</p><p>export HIVE_AUX_JARS_PATH=/export/server/hive/lib</p><p><img src="../images/clip_image024.png" alt="c25d9937e544f1e3dae3ab154d75f4f"></p><p><img src="../images/clip_image026.png" alt="17592bb0f12829d35b16c72d8f2f5d1"></p><p>hive-site.xml</p><p>vim hive-site.xml</p><configuration><br><br><!-- 存储元数据mysql相关配置 --><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionURL</name><br><br>​    <value>jdbc:mysql://node1:3306/hive3?createDatabaseIfNotExist=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8</value><br><br></property><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionDriverName</name><br><br>​    <value>com.mysql.jdbc.Driver</value><br><br></property><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionUserName</name><br><br>​    <value>root</value><br><br></property><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionPassword</name><br><br>​    <value>hadoop</value><br><br></property><br><br><!-- H2S运行绑定host --><br><br><property><br><br>  <name>hive.server2.thrift.bind.host</name><br><br>  <value>node1</value><br><br></property><br><br><!-- 远程模式部署metastore metastore地址 --><br><br><property><br><br>  <name>hive.metastore.uris</name><br><br>  <value>thrift://node1:9083</value><br><br></property><br><br><!-- 关闭元数据存储授权 --><br><br><property><br><br>  <name>hive.metastore.event.db.notification.api.auth</name><br><br>  <value>false</value><br><br></property><br><br></configuration><p>4）上传mysql jdbc驱动到hive安装包lib下</p><p>mysql-connector-java-5.1.32.jar</p><p><img src="../images/clip_image028.png" alt="3a4dab1bba81097b499636c841b5138"></p><p>5）初始化元数据</p><p>cd /export/server/hive/</p><p>bin/schematool -initSchema -dbType mysql -verbos</p><p>初始化成功之后会在MySQL中创建74张表</p><p><img src="../images/clip_image030.png" alt="41225404abf9fc57bc00444838bcee2"></p><p>6）在hdfs创建hive存储目录（如存在则不用操作）</p><p>hadoop fs -mkdir /tmp</p><p>hadoop fs -mkdir -p /user/hive/warehouse</p><p>hadoop fs -chmod g+w /tmp</p><p>hadoop fs -chmod g+w /user/hive/warehouse</p><p>7）启动hive</p><p><strong>（**</strong>3<strong><strong>）启动</strong></strong>metastore<strong>**服务</strong> 前台启动 关闭ctrl+c</p><p>/export/server/hive/bin/hive –service metastore</p><p><img src="../images/clip_image032.png" alt="f43e1eb114b42423c231563857792f9"></p><p>前台启动开启debug日志</p><p>/export/server/hive/bin/hive –service metastore –hiveconf hive.root.logger=DEBUG,console </p><p><img src="../images/clip_image034.png" alt="bb2de8abc80b0b607baba205d42c6dd"></p><p>后台启动 进程挂起 关闭使用jps+ kill -9</p><p>nohup /export/server/hive/bin/hive –service metastore &amp;</p><p><img src="../images/clip_image036.png" alt="1e7c8e9cf08b79262078d75c94a9eb4"></p><p><strong>（**</strong>4<strong><strong>）启动</strong></strong>hiveserver2<strong>**服务</strong></p><p>nohup /export/server/hive/bin/hive –service hiveserver2 &amp;</p><p><img src="../images/clip_image038.png" alt="0cd929d758b7242189a8df87dac7316"></p><p><img src="../images/clip_image040.png" alt="de5b62560401e554a1624abbe4a9428"></p><p>beeline客户端连接</p><p>拷贝node1安装包到beeline客户端机器上（node3）</p><p>scp -r /export/server/apache-hive-3.1.2-bin/ root@node3:/export/server/</p><p><strong>（**</strong>5<strong><strong>）</strong></strong>hive<strong>**注释信息中文乱码解决</strong></p><p>以下sql语句均在mysql数据库中执行</p><p>use hivenode2;</p><p>show tables;</p><p>alter table hivenode2.COLUMNS_V2 modify column COMMENT varchar(256) character set utf8;</p><p>alter table hivenode2.TABLE_PARAMS modify column PARAM_VALUE varchar(4000) character set utf8;</p><p>alter table hivenode2.PARTITION_PARAMS modify column PARAM_VALUE varchar(4000) character set utf8 ;</p><p>alter table hivenode2.PARTITION_KEYS modify column PKEY_COMMENT varchar(4000) character set utf8;</p><p>alter table hivenode2.INDEX_PARAMS modify column PARAM_VALUE varchar(4000) character set utf8;</p><h2 id="一、Git安装"><a href="#一、Git安装" class="headerlink" title="一、Git安装"></a>一、Git安装</h2><p>（1）Git下载</p><p>核心程序</p><p><img src="../images/clip_image042.jpg" alt="img"></p><p>（2）可视化客户端</p><p><img src="../images/clip_image043.png" alt="img"></p><p>中文语言包</p><p><img src="../images/clip_image045.jpg" alt="img"></p><p>（3）初始化仓库</p><p><img src="../images/clip_image046.png" alt="img"></p><p><img src="../images/clip_image048.jpg" alt="img"></p><p>（4）添加文件，提交文件至本地仓库</p><p><img src="../images/clip_image050.jpg" alt="img"></p><p>（5）本地删除与恢复</p><p>文件选中删除，可用以下方式还原</p><p><img src="../images/clip_image052.jpg" alt="img"></p><p>（6）创建分支</p><p><img src="../images/clip_image054.jpg" alt="img"></p><p><img src="../images/clip_image056.jpg" alt="img"></p><p>（7）分支的查看切换</p><p><img src="../images/clip_image058.jpg" alt="img"></p><p><img src="../images/clip_image060.jpg" alt="img"><img src="../images/clip_image062.jpg" alt="img"></p><p>（8）标签的创建</p><p><img src="../images/clip_image064.jpg" alt="img"></p><p><img src="../images/clip_image066.jpg" alt="img"></p><p>（9）切换与删除</p><p><img src="../images/clip_image068.png" alt="img"></p><p><img src="../images/clip_image070.png" alt="img"></p><p>通过右键选中删除</p><p><strong>远程仓库</strong></p><p><img src="../images/clip_image072.jpg" alt="img"></p><p><img src="../images/clip_image074.jpg" alt="img"></p><p>（1）码云账号注册</p><p><img src="../images/clip_image076.jpg" alt="img"></p><p>填写邮箱发送验证码,然后可以注册账号,主页如下</p><p><img src="../images/clip_image078.jpg" alt="img"></p><p>（2）创建远程仓库</p><p><img src="../images/clip_image080.jpg" alt="img"></p><p>（3）把本地代码推送到远端</p><p><img src="../images/clip_image082.jpg" alt="img"></p><p><img src="../images/clip_image084.jpg" alt="img"></p><p>生成公钥私钥</p><p>ssh-keygen -t rsa</p><p>一直回车</p><p>会默认用户目录 .ssh 目录生成一个默认的id_rsa文件 和id_rsa.pub</p><p>密钥配置</p><p><img src="../images/clip_image086.jpg" alt="img"></p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote><ul><li><a href></a></li><li><a href></a></li></ul></blockquote>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;&lt;strong&gt;（**&lt;/strong&gt;1&lt;strong&gt;&lt;strong&gt;）&lt;/strong&gt;&lt;/strong&gt;Mysql&lt;strong&gt;**安装&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;1）卸载Centos7自带的mariadb&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;../image</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>Hello World</title>
     <link href="http://example.com/wiki/hello-world/"/>
     <id>http://example.com/wiki/hello-world/</id>
-    <published>2023-06-08T02:21:40.060Z</published>
-    <updated>2023-06-08T02:21:42.000Z</updated>
+    <published>2023-06-14T13:14:19.290Z</published>
+    <updated>2023-06-07T05:01:58.000Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
     
@@ -55,6 +33,237 @@
     
     
     
+    
+  </entry>
+  
+  <entry>
+    <title>pyspark基础编码环境</title>
+    <link href="http://example.com/wiki/pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83/"/>
+    <id>http://example.com/wiki/pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83/</id>
+    <published>2023-06-07T15:19:34.000Z</published>
+    <updated>2023-06-09T01:13:12.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>（一）、pyspark环境配置安装。</p><p>PySpark是Spark官方提供的一个Python类库，内置了Spark API，可以通过PySpark类库来编写Spark程序，并提交到Spark集群中运行。前情提示：</p><p>（1）将课程资料中提供的的hadoop-3.3.0文件，复制到某个盘符下（中文的且无空格的）。</p><p>（2）将文件夹内bin内的Hadoop.dll复制到C:\Windows\Systmctl32里面去。</p><p>（3）在系统环境变量中配置HADOOP_HOME，指向hadoop-3.3.0文件夹的路径。</p><p><img src="/.com//wps55.jpg" alt="img"> </p><p>（二）本机PySpark环境配置</p><p>在前面部署Spark的时候，已经在Linux系统上部署了acaconda的Python环境，详见Spark的Stand Alone模式部署章节。故本次在Windows上安装anaconda，并配置PySpark库。具体安装步骤如下：</p><p>（1）在课程资料中选择anaconda应用程序双击安装。</p><p><img src="/.com//wps56.jpg" alt="img"> </p><p>（2）一直选择Next，进行安装。</p><p><img src="/.com//wps57.png" alt="img"> </p><p><img src="/.com//wps58.png" alt="img"> </p><p>注意：选择第一个，将anaconda添加至我的环境变量中！</p><p><img src="/.com//wps59.png" alt="img"> </p><p>（1）安装结束后会出现anaconda3文件夹。打开Anaconda Prompt(anaconda),会出现base，即为安装成功。</p><p><img src="/.com//wps60.jpg" alt="img"> </p><p><img src="/.com//wps61.jpg" alt="img"> </p><p>（4）配置国内源，加速网络下载。</p><p>1、在Anaconda Prompt(anaconda)中执行conda config –set show_channel</p><p>_urls yes。</p><p>2、将如下内容替换到C:\Users\用户名.condarc文件中。</p><p>channels:</p><p> - defaults</p><p>show_channel_urls: true</p><p>default_channels:</p><p> - <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main">https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</a></p><p> - <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r">https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</a></p><p> - <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2">https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</a></p><p>custom_channels:</p><p> conda-forge: <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud">https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</a></p><p> msys2: <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud">https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</a></p><p> bioconda: <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud">https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</a></p><p> menpo: <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud">https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</a></p><p> pytorch: <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud">https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</a></p><p> simpleitk: <a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud">https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</a></p><p>（5）创建虚拟环境</p><p>1、创建虚拟环境 pyspark, 基于Python 3.8</p><p>conda create -n pyspark python=3.8</p><p>2、切换到虚拟环境内</p><p>conda activate pyspark</p><p>3、在虚拟环境内安装包</p><p>pip install pyhive pyspark jieba -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/</a></p><p>simple</p><p>安装成功示例：</p><p><img src="/.com//wps62.jpg" alt="img"> </p><p>（三）PyCharm中配置Python解释器</p><p>（1）配置本地解释器：创建Python项目，选择conda虚拟环境PySpark中的Python.exe解释器。</p><p><img src="/.com//wps63.jpg" alt="img"> </p><p>（2）配置远程SSH Linux解释器</p><p>1、远程SSH python pyspark环境</p><p><img src="/.com//wps64.jpg" alt="img"> </p><p>2、添加新的远程连接</p><p><img src="/.com//wps65.jpg" alt="img"><img src="/.com//wps66.jpg" alt="img"> </p><p>3、设置虚拟的python环境路径</p><p><img src="/.com//wps67.jpg" alt="img"> </p><p>（四）WordCount应用实战</p><p>可以选择在本地的PySpark环境中执行spark代码，也可以选择在虚拟机环境PySpark中执行。选择本地的就是使用conda环境，应用其中的PySpark环境执行，来读取本地文件，完成单词计数的实例。选择远程虚拟机中的PySpark环境，需要SSH连接到服务器（这里需要安装Pycharm专业版），注意：无论是选择那种方案，都是在PyCharm软件中去执行，完成上述过程。</p><p>（1）WordCount代码本地执行</p><p>准备pyspark代码以及本地文件words.txt，在PyCharm中执行。</p><p># coding:utf8</p><p>from pyspark import SparkConf, SparkContext</p><p># import os</p><p>import os</p><p>os.environ[‘PYSPARK_PYTHON’]=’D:\anaconda3\envs\pyspark\python.exe’</p><p>os.environ [‘JAVA_HOME’] = ‘D:\Java\jdk1.8.0_241’</p><p>#os.environ[‘PYSPARK_PYTHON’]=’/export/server/anaconda3/envs/pyspark/bin/python3.8’</p><p>if <strong>name</strong> == ‘<strong>main</strong>‘:</p><p>  conf = SparkConf().setAppName(“WordCountHelloWorld”).setMaster(“local[*]”)</p><p>  # 通过SparkConf对象构建SparkContext对象</p><p>  sc = SparkContext(conf=conf)</p><p>  # 需求 : wordcount单词计数, 读取HDFS上的words.txt文件, 对其内部的单词统计出现 的数量</p><p>  # 读取文件</p><p>  #file_rdd = sc.textFile(“hdfs://node1:8020/input/words.txt”)</p><p>  #file_rdd = sc.textFile(“file:///tmp/pycharm_project_621/data/words.txt”)</p><p>  file_rdd = sc.textFile(“D:\数据挖掘与分析实验报告合集\pyspark\data\input\words.txt”)</p><p>  # 将单词进行切割, 得到一个存储全部单词的集合对象</p><p>  words_rdd = file_rdd.flatMap(lambda line: line.split(“ “))</p><p>  # 将单词转换为元组对象, key是单词, value是数字1</p><p>  words_with_one_rdd = words_rdd.map(lambda x: (x, 1))</p><p>  # 将元组的value 按照key来分组, 对所有的value执行聚合操作(相加)</p><p>  result_rdd = words_with_one_rdd.reduceByKey(lambda a, b: a + b)</p><p>  # 通过collect方法收集RDD的数据打印输出结果</p><p>print(result_rdd.collect())</p><p>运行结果截图：</p><p><img src="/.com//wps68.jpg" alt="img"></p><p>（2）WordCount代码远程服务器上执行。</p><p>通过SSH连接到远程服务器上，详见上述操作。</p><p><img src="/.com//wps69.jpg" alt="img"> </p><p><img src="/.com//wps70.jpg" alt="img">  </p><p>完成与服务器连接后，会在服务器中的/tmp文件夹下新建了pycharm_project_xxx文件夹用于放置本地的同步代码。</p><p><img src="/.com//wps71.jpg" alt="img"> </p><p>（3）读取HDFS上的文件</p><p>1、将读取文件路径改为hdfs上的/input/words.txt</p><p><img src="/.com//wps72.jpg" alt="img"> </p><p>2、在hdfs上新建/input文件夹，使用命令hadoop fs -mkdir /input</p><p>3、上传words.txt到hdfs中，使用命令hadoop fs -put words.txt /input/</p><p><img src="/.com//wps73.jpg" alt="img"> </p><p>4、在pycharm中执行spark代码</p><p><img src="/.com//wps74.jpg" alt="img"> </p><p>（五）spark-submit作业提交</p><p>（1）local本地模式</p><p>首先将helloword.py程序放到/root/目录下，使用命令bin/spark-submit –master local[*] /root/helloworld.py完成提交作业。</p><p><img src="/.com//wps75.jpg" alt="img"> </p><p>（2）spark on yarn模式</p><p>使用命令bin/spark-submit –master yarn /root/helloworld.py完成提交作业。</p><p><img src="/.com//wps76.jpg" alt="img"> </p><p>（3）使用历史服务器查看任务执行情况 node1:18080</p><p><img src="/.com//wps77.jpg" alt="img"> </p><p><img src="/.com//wps78.jpg" alt="img"> </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;（一）、pyspark环境配置安装。&lt;/p&gt;
+&lt;p&gt;PySpark是Spark官方提供的一个Python类库，内置了Spark API，可以通过PySpark类库来编写Spark程序，并提交到Spark集群中运行。前情提示：&lt;/p&gt;
+&lt;p&gt;（1）将课程资料中提供的的hado</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="http://example.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="搭建" scheme="http://example.com/tags/%E6%90%AD%E5%BB%BA/"/>
+    
+    <category term="spark" scheme="http://example.com/tags/spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>YARN模式</title>
+    <link href="http://example.com/wiki/YARN%E6%A8%A1%E5%BC%8F/"/>
+    <id>http://example.com/wiki/YARN%E6%A8%A1%E5%BC%8F/</id>
+    <published>2023-06-07T15:15:42.000Z</published>
+    <updated>2023-06-09T01:13:52.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>（1）Client模式中driver运行在客户端，在客户端显示输出结果，但是在spark历史服务器不显示logs信息。</p><p>（2）Cluster模式中driver运行在YARN容器内部，和ApplicationMaster在同一个容器内，在客户端不显示输出结果，所以在spark历史服务器中显示logs的信息。</p><p><img src="/.com//wps52.jpg" alt="img"> </p><p>（3）client模式测试</p><p>bin/spark-submit –master yarn –deploy-mode client –driver-memory 512m ${SPARK_HOME}/examples/src/main/python/pi.py 10</p><p><img src="/.com//wps53.jpg" alt="img"> </p><p>（4） cluster模式测试</p><p>bin/spark-submit –master yarn –deploy-mode cluster –driver-memory 512m --conf “spark.pyspark.driver.python=/export/server/anaconda3</p><p>/bin/python3” --conf “spark.pyspark.python=/export/server/anaconda3</p><p>/bin/python3” ${SPARK_HOME}/examples/src/main/python/pi.py 10</p><p><img src="/.com//wps54.jpg" alt="img"> </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;（1）Client模式中driver运行在客户端，在客户端显示输出结果，但是在spark历史服务器不显示logs信息。&lt;/p&gt;
+&lt;p&gt;（2）Cluster模式中driver运行在YARN容器内部，和ApplicationMaster在同一个容器内，在客户端不显示输出结果，所</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="http://example.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="搭建" scheme="http://example.com/tags/%E6%90%AD%E5%BB%BA/"/>
+    
+    <category term="spark" scheme="http://example.com/tags/spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spark-HA环境部署</title>
+    <link href="http://example.com/wiki/Spark-HA%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/"/>
+    <id>http://example.com/wiki/Spark-HA%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</id>
+    <published>2023-06-07T15:07:49.000Z</published>
+    <updated>2023-06-09T01:13:22.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>（1）首先进入spark-env.sh中，vim /export/server/spark/conf/spark</p><p>-env.sh</p><p><img src="/.com//wps42.jpg" alt="img"> </p><p>（2）在spark-env.sh配置文件中删除 export SPARK_MASTER_</p><p>HOST=node1</p><p>（目的是不然机器知道固定的master是谁，不然无法进行master切换）</p><p><img src="/.com//wps43.jpg" alt="img"> </p><p>（3）在spark-env.sh配置文件中增加以下内容：</p><p>SPARK_DAEMON_JAVA_OPTS=”-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=node1:2181,node2:2181,node3:2181 -Dspark.deploy.zookeeper.dir=/spark-ha”</p><p># spark.deploy.recoveryMode 指定HA模式 基于Zookeeper实现</p><p># 指定Zookeeper的连接地址</p><p># 指定在Zookeeper中注册临时节点的路径</p><p><img src="/.com//wps44.jpg" alt="img"> </p><p>（4）将spark-env.sh配置文件分发给node2、node3。</p><p>scp -r /export/server/spark/conf/spark-env.sh node2:/export/server/spark</p><p>/conf/</p><p>scp -r /export/server/spark/conf/spark-env.sh node3:/export/server/spark</p><p>/conf/</p><p><img src="/.com//wps45.jpg" alt="img"> </p><p>（5）启动StandAlone集群、zookeeper集群：</p><p>1）在node1上：sbin/start-all.sh</p><p><img src="/.com//wps46.jpg" alt="img"> </p><p>2）在node2上：sbin/start-master.sh</p><p>（目的是：备用master，当kill掉node1的master后，程序依然能进行）</p><p><img src="/.com//wps47.jpg" alt="img"> </p><p>（5）查看node1、node2的WEB UI</p><p>（如果8080端口被占用了，可以顺延到8081、8082端口，</p><p>其中node1上的master是alive的，node2上的是standby） </p><p>node1:8080–&gt;8081   </p><p>node2:8080–&gt;8081\8082</p><p><img src="/.com//wps48.jpg" alt="img"> </p><p><img src="/.com//wps49.jpg" alt="img"> </p><p>（6）Master主备切换，在/export/server/spark路径下提交一个任务到当前alive master上:</p><p>bin/spark-submit –master spark://node1:7077 \</p><p>/export/server/spark/examples/src/main/python/pi.py 1000</p><p>（在提交成功后, 将alive master直接kill掉，系统不会中断，仍然能正常运行结果）</p><p><img src="/.com//wps50.jpg" alt="img"> </p><h3 id="（7）查看Master的WEB-UI，只有node2是alive的，证明master切换成功"><a href="#（7）查看Master的WEB-UI，只有node2是alive的，证明master切换成功" class="headerlink" title="（7）查看Master的WEB UI，只有node2是alive的，证明master切换成功"></a>（7）查看Master的WEB UI，只有node2是alive的，证明master切换成功</h3><p><img src="/.com//wps51.jpg" alt="img"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;（1）首先进入spark-env.sh中，vim /export/server/spark/conf/spark&lt;/p&gt;
+&lt;p&gt;-env.sh&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/.com//wps42.jpg&quot; alt=&quot;img&quot;&gt; &lt;/p&gt;
+&lt;p&gt;（2）在spark-e</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="http://example.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="搭建" scheme="http://example.com/tags/%E6%90%AD%E5%BB%BA/"/>
+    
+    <category term="spark" scheme="http://example.com/tags/spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spark-StandAlone环境部署</title>
+    <link href="http://example.com/wiki/Spark-StandAlone%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/"/>
+    <id>http://example.com/wiki/Spark-StandAlone%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</id>
+    <published>2023-06-07T14:51:41.000Z</published>
+    <updated>2023-06-09T01:13:42.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>（一）、集群规划：选择三台机器分别为node1、node2、node3来组成集群环境。</p><p>其中node1上安装master和worker进程；node2上安装worker进程；node3上安装worker进程。</p><p>（二）、anaconda on linux安装过程：</p><p>（1）前提：在linux服务器node1、node2、node3上都安装python(anaconda)。并安装pyspark虚拟环境。具体安装步骤如下。</p><p>1、在/export/server/目录下上传anaconda的安装包Anaconda3-2021.</p><p>05-Linux-x86_64.sh。</p><p><img src="/.com//wps20.jpg" alt="img"> </p><p><img src="/.com//wps21.jpg" alt="img"> </p><p>2、安装anaconda 使用命令：sh ./Anaconda3-2021.05-Linux-x86_64.sh</p><p><img src="/.com//wps22.jpg" alt="img"> </p><p><img src="/.com//wps23.jpg" alt="img"> </p><p><img src="/.com//wps24.jpg" alt="img"> </p><p>3、安装完毕之后若没有出现base环境，进行如下配置。在/root/.condarc添加国内源</p><p><img src="/.com//wps25.jpg" alt="img"> </p><p>安装完毕后，关闭服务器重新启动，出现base环境即安装成功。</p><p><img src="/.com//wps26.jpg" alt="img"> </p><p>（2）在anaconda中，安装pyspark虚拟环境。</p><p>1、基于python3.8安装pyspark环境。</p><p><img src="/.com//wps27.jpg" alt="img"> </p><p>2、切换到pyspark中，并安装所需要的安装包。</p><p><img src="/.com//wps28.jpg" alt="img"> </p><p>注：在node1、node2、node3三台服务器上都完成配置！</p><p>（三）、StandAlone模式部署</p><p>（1）安装spark压缩文件。</p><p>1、进入到/export/server/中上传并解压spark-3.2.0-bin-hadoop3.2.tgz。并设置软链接，命令为ln-s/export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark。</p><p> （2）在/export/server/spark/conf，配置文件。</p><p>1、首先在配置workers文件。mv workers.template workers；vim workers；</p><p><img src="/.com//wps29.jpg" alt="img"> </p><p>2.配置spark-env.sh文件。mv spark-env.sh.template spark-env.sh；</p><p>Vim spark-env.sh，添加如下内容。</p><p>## 设置JAVA安装目录</p><p>JAVA_HOME=/export/server/jdk</p><p>## HADOOP软件配置文件目录，读取HDFS上文件和运行YARN集群</p><p>HADOOP_CONF_DIR=/export/server/hadoop/etc/hadoop</p><p>YARN_CONF_DIR=/export/server/hadoop/etc/hadoop</p><p>## 指定spark老大Master的IP和提交任务的通信端口</p><p># 告知Spark的master运行在哪个机器上</p><p>export SPARK_MASTER_HOST=node1</p><p># 告知sparkmaster的通讯端口</p><p>export SPARK_MASTER_PORT=7077</p><p># 告知spark master的 webui端口</p><p>SPARK_MASTER_WEBUI_PORT=8080</p><p># worker cpu可用核数</p><p>SPARK_WORKER_CORES=1</p><p># worker可用内存</p><p>SPARK_WORKER_MEMORY=1g</p><p># worker的工作通讯地址</p><p>SPARK_WORKER_PORT=7078</p><p># worker的 webui地址</p><p>SPARK_WORKER_WEBUI_PORT=8081</p><p>## 设置历史服务器</p><p># 配置的意思是  将spark程序运行的历史日志 存到hdfs的/sparklog文件夹中</p><p>SPARK_HISTORY_OPTS=”-Dspark.history.fs.logDirectory=hdfs://node1:8020/sparklog/ -Dspark.history.fs.cleaner.enabled=true”</p><p><img src="/.com//wps30.jpg" alt="img"> </p><p>3、在HDFS上创建程序运行历史记录存放的文件夹。</p><p>hadoop fs -mkdir /sparklog；hadoop fs -chmod 777 /sparklog</p><p>4、配置spark-defaults.conf文件。mv spark-defaults.conf.template spark-defaults.conf；vim spark-defaults.conf，添加如下内容。</p><p><img src="/.com//wps31.jpg" alt="img"> </p><p>5、配置log4j.properties 文件[可选配置]。mv log4j.properties.template log4j.properties；修改配置，设置级别为WARN 只输出警告和错误日志。</p><p><img src="/.com//wps32.jpg" alt="img"> </p><p>（四）、将spark分发到node2和node3服务器上。注意同时要设置软链接。</p><p>scp -r spark-3.1.2-bin-hadoop3.2 node2:/export/server/</p><p>scp -r spark-3.1.2-bin-hadoop3.2 node3:/export/server/</p><p>ln -s /export/server/spark-3.1.2-bin-hadoop3.2 /export/server/spark</p><p> 注意：配置/etc/profile，JAVA_HOME；SPARK_HOME；PYSPARK_PYTHON都指向正确的目录。</p><p> （五）、启动历史服务器，启动Spark的Master和Worker进程</p><p>（1）启动历史服务器：sbin/start-history-server.sh</p><p>（2）启动全部的master和worker：sbin/start-all.Sh</p><p><img src="/.com//wps33.jpg" alt="img"> </p><p><img src="/.com//wps34.jpg" alt="img"><img src="/.com//wps35.jpg" alt="img"> </p><p>（六）、查看Master的WEB UI 在浏览器中输入node1:8080</p><p><img src="/.com//wps36.jpg" alt="img"> </p><p>（七）、连接到StandAlone集群</p><p>（1）通过master来连接到StandAlone集群。</p><p>bin/pyspark –master spark://node1:7077</p><p><img src="/.com//wps37.jpg" alt="img"> </p><p>（2）使用spark-shell连接StandAlone集群。</p><p>bin/spark-shell –master spark://node1:7077，进行测试。</p><p><img src="/.com//wps38.jpg" alt="img"> </p><p>（3）使用spark-submit(PI)提交任务到集群上执行。bin/spark-submit –master spark://node1:7077/export/server/spark/examples/src/main/Pytho</p><p>n/pi.py 10</p><p><img src="/.com//wps39.jpg" alt="img"> </p><p><img src="/.com//wps40.jpg" alt="img"> </p><p>查看历史服务器：在浏览器中输入node1：18080</p><p><img src="/.com//wps41.jpg" alt="img"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;（一）、集群规划：选择三台机器分别为node1、node2、node3来组成集群环境。&lt;/p&gt;
+&lt;p&gt;其中node1上安装master和worker进程；node2上安装worker进程；node3上安装worker进程。&lt;/p&gt;
+&lt;p&gt;（二）、anaconda on li</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="http://example.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="搭建" scheme="http://example.com/tags/%E6%90%AD%E5%BB%BA/"/>
+    
+    <category term="spark" scheme="http://example.com/tags/spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spark-local环境部署</title>
+    <link href="http://example.com/wiki/Spark-local%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/"/>
+    <id>http://example.com/wiki/Spark-local%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/</id>
+    <published>2023-06-07T14:35:48.000Z</published>
+    <updated>2023-06-09T01:13:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>（1）安装Anaconda</p><p>上传安装包 sh ./Anaconda3-2021.05-Linux-x86_64.sh</p><p><img src="/.com//wps1.jpg" alt="img"> </p><p><img src="/.com//wps2.jpg" alt="img">出现（base)即为安装成功</p><p>（2）创建虚拟环境</p><p>conda create -n pyspark python=3.8</p><p>conda activate pyspark</p><p>pip install pyhive pyspark jieba -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn</a></p><p>/simple</p><p>（1）修改环境变量配置Spark由如下5个环境变量需要设置</p><p>SPARK_HOME: 表示Spark安装路径在哪里 </p><p>PYSPARK_PYTHON: 表示Spark想运行Python程序, 那么去哪里找python执行器。 </p><p>JAVA_HOME: 告知Spark Java在哪里 </p><p>HADOOP_CONF_DIR: 告知Spark Hadoop的配置文件在哪里 </p><p>HADOOP_HOME: 告知Spark  Hadoop安装在哪里</p><p>这5个环境变量 都需要配置在: /etc/profile中！</p><p><img src="/.com//wps3.jpg" alt="img"> </p><p>（4）解压</p><p>解压下载的Spark安装包</p><p>tar -zxvf spark-3.2.0-bin-hadoop3.2.tgz -C /export/server/<img src="/.com//wps4.jpg" alt="img"></p><p>设置软连接</p><p>ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</p><p>（2）测试</p><p>bin/pyspark</p><p><img src="/.com//wps5.jpg" alt="img">在这个环境可以运行spark代码，如图：</p><p><img src="/.com//wps6.jpg" alt="img"> </p><p>sc.parallelize([1,2,3,4,5]).map(lambda x: x + 1).collect()</p><p><strong><em>\</em>Spark StandAlone环境部署**</strong></p><p>在所有机器安装Python(Anaconda)，并在所有机器配置环境变量。</p><p><img src="/.com//wps7.jpg" alt="img"> </p><p><img src="/.com//wps8.jpg" alt="img"> </p><p>（1）配置配置文件</p><p>进入到spark的配置文件目录中, cd $SPARK_HOME/conf`</p><p>配置workers文件vi workers</p><p># 改名, 去掉后面的.template后缀</p><p>mv workers.template workers</p><p># 编辑worker文件</p><p>vim workers</p><p># 将里面的localhost删除, 追加</p><p>node1</p><p>node2</p><p>node3</p><p>到workers文件内</p><p><img src="/.com//wps9.jpg" alt="img">（2)配置spark-env.sh文件</p><p># 1. 改名</p><p>mv spark-env.sh.template spark-env.sh</p><p># 2. 编辑spark-env.sh, 在底部追加如下内容</p><p>## 设置JAVA安装目录</p><p>JAVA_HOME=/export/server/jdk</p><p>## HADOOP软件配置文件目录，读取HDFS上文件和运行YARN集群</p><p>HADOOP_CONF_DIR=/export/server/hadoop/etc/hadoop</p><p>YARN_CONF_DIR=/export/server/hadoop/etc/hadoop</p><p>## 指定spark老大Master的IP和提交任务的通信端口</p><p># 告知Spark的master运行在哪个机器上</p><p>export SPARK_MASTER_HOST=node1</p><p># 告知sparkmaster的通讯端口</p><p>export SPARK_MASTER_PORT=7077</p><p># 告知spark master的 webui端口</p><p>SPARK_MASTER_WEBUI_PORT=8080</p><p> # worker cpu可用核数</p><p>SPARK_WORKER_CORES=1</p><p># worker可用内存</p><p>SPARK_WORKER_MEMORY=1g</p><p># worker的工作通讯地址</p><p>SPARK_WORKER_PORT=7078</p><p># worker的 webui地址</p><p>SPARK_WORKER_WEBUI_PORT=8081</p><p>## 设置历史服务器</p><p># 配置的意思是  将spark程序运行的历史日志 存到hdfs的/sparklog文件夹中</p><p><img src="/.com//wps10.jpg" alt="img">SPARK_HISTORY_OPTS=”-Dspark.history.fs.logDirectory=hdfs://node1:8020/sparklog/ -Dspark.history.fs.cleaner.enabled=true”</p><p>在HDFS上创建程序运行历史记录存放的文件夹:</p><p>hadoop fs -mkdir /sparklog</p><p><img src="/.com//wps11.jpg" alt="img">hadoop fs -chmod 777 /sparklog</p><p>（3）配置spark-defaults.conf文件</p><p># 1. 改名</p><p>mv spark-defaults.conf.template spark-defaults.conf</p><p> # 2. 修改内容, 追加如下内容</p><p># 开启spark的日期记录功能</p><p>spark.eventLog.enabled     true</p><p># 设置spark日志记录的路径</p><p>spark.eventLog.dir     hdfs://node1:8020/sparklog/ </p><p># 设置spark日志是否启动压缩</p><p>spark.eventLog.compress     true</p><p><img src="/.com//wps12.jpg" alt="img"></p><p>（4)配置log4j.properties 文件 [可选配置]</p><p>mv log4j.properties.template log4j.properties</p><p><img src="/.com//wps13.jpg" alt="img">注意：将Spark安装文件夹  分发到其它的服务器</p><p>1）scp -r spark-3.1.2-bin-hadoop3.2 node2:/export/server/</p><p>2）scp -r spark-3.1.2-bin-hadoop3.2 node3:/export/server/</p><p>3）在node2和node3上 给spark安装目录增加软链接</p><p>ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</p><p><img src="/.com//wps14.jpg" alt="img"> </p><p>（5）启动历史服务器</p><p>sbin/start-history-server.sh</p><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td></td><td><img src="/.com//wps15.jpg" alt="img"></td></tr></tbody></table><p>（6）启动Spark的Master和Worker进程</p><p>sbin/start-all.sh</p><p>sbin/start-master.sh</p><p>sbin/start-worker.sh</p><p>sbin/stop-all.sh</p><p>sbin/stop-master.sh</p><p>sbin/stop-worker.sh</p><p><img src="/.com//wps16.jpg" alt="img"><img src="/.com//wps17.jpg" alt="img"></p><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td></td><td><img src="/.com//wps18.jpg" alt="img"></td></tr></tbody></table><p>查看Master的WEB UI</p><p>连接到StandAlone集群</p><p><img src="/.com//wps19.jpg" alt="img"> </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;（1）安装Anaconda&lt;/p&gt;
+&lt;p&gt;上传安装包 sh ./Anaconda3-2021.05-Linux-x86_64.sh&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/.com//wps1.jpg&quot; alt=&quot;img&quot;&gt; &lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/.com//w</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="http://example.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="搭建" scheme="http://example.com/tags/%E6%90%AD%E5%BB%BA/"/>
+    
+    <category term="spark" scheme="http://example.com/tags/spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Docker安装</title>
+    <link href="http://example.com/wiki/Docker%E5%AE%89%E8%A3%85/"/>
+    <id>http://example.com/wiki/Docker%E5%AE%89%E8%A3%85/</id>
+    <published>2023-06-07T11:55:26.000Z</published>
+    <updated>2023-06-09T01:12:40.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>（1）卸载（可选）</p><p>如果之前安装过旧版本的Docker，可以使用下面命令卸载：</p><p>yum remove docker \</p><p>​         docker-client \</p><p>​         docker-client-latest \</p><p>​         docker-common \</p><p>​         docker-latest \</p><p>​         docker-latest-logrotate \</p><p>​         docker-logrotate \</p><p>​         docker-selinux \</p><p>​         docker-engine-selinux \</p><p>​         docker-engine \</p><p>​         docker-ce</p><p>（2）yum源配置</p><p>1.备份配置文件</p><p>1）mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS</p><p>-Base.repo.backup</p><p><img src="/.com//wps73.jpg" alt="img"> </p><p>2）wget -O /etc/yum.repos.d/CentOS-Base.repo <a href="http://mirrors.aliyun.com/repo/Centos-7.repo">http://mirrors.aliyun</a></p><p>.com/repo/Centos-7.repo</p><p><img src="/.com//wps74.jpg" alt="img"> </p><p>3）wget -O /etc/yum.repos.d/epel.repo <a href="http://mirrors.aliyun.com/repo/epel-7.repo">http://mirrors.aliyun.com/rep</a></p><p>o/epel-7.repo</p><p><img src="/.com//wps75.jpg" alt="img"> </p><p>4）yum clean all</p><p><img src="/.com//wps76.jpg" alt="img"> </p><p>5）yum makecache</p><p><img src="/.com//wps77.jpg" alt="img"> </p><p>6）yum install -y bash-completion vim lrzsz wget expect net-tools nc nmap treedos2unix htop iftop iotop unzip telnet sl psmisc nethogs glances bc ntpdate openldap-devel</p><p><img src="/.com//wps78.jpg" alt="img"> </p><p><strong><em>\</em>安装docker**</strong></p><p>（1）受限需要虚拟机联网，安装yum工具</p><p><img src="/.com//wps79.jpg" alt="img"> </p><p>（2）配置网卡转发</p><p>1）docker必须安装在centos7平台，内核版本不低于3.10在centos平台运行docker可能会遇见些告警信息，修改内核配置参数，打开内核转发功能</p><p>写入</p><p><img src="/.com//wps80.jpg" alt="img"> </p><p>2）重新加载内核参数</p><p>modprobe br_netfilter</p><p>sysctl -p /etc/sysctl.d/docker.conf</p><p><img src="/.com//wps81.jpg" alt="img"> </p><p>（3）利用yum进行docker安装</p><p>提前配置好yum仓库</p><p>1）阿里云自带仓库</p><p>curl -o /etc/yum.repos.d/Centos-7.repo <a href="http://mirrors.aliyun.com/repo/Centos-7.repo">http://mirrors.aliyun.com/repo/</a></p><p>Centos-7.repo</p><p><img src="/.com//wps82.jpg" alt="img"> </p><p> 2）阿里云提供的docker专属repo仓库</p><p>curl-o/etc/yum.repos.d/docker-ce.repo<a href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a></p><p><img src="/.com//wps83.jpg" alt="img"> </p><p>3）更新yum缓存</p><p>yum clean all &amp;&amp; yum makecache</p><p><img src="/.com//wps84.jpg" alt="img"> </p><p>4）查看源中可用版本</p><p>yum list docker-ce –showduplicates | sort -r</p><p><img src="/.com//wps85.jpg" alt="img"> </p><p>5）yum安装</p><p>yum install docker-ce -y</p><p><img src="/.com//wps86.jpg" alt="img"> </p><p>docker -v</p><p><img src="/.com//wps87.jpg" alt="img"> </p><p>卸载</p><p>yum remove -y docker-ce-xxx</p><p>（4）配置镜像加速器</p><p>用于加速镜像文件下载,选用阿里云镜像站</p><p>1）mkdir -p /etc/docker</p><p><img src="/.com//wps88.jpg" alt="img"> </p><p>touch /etc/docker/daemon.json</p><p><img src="/.com//wps89.jpg" alt="img"> </p><p>2）进入文件vim /etc/docker/daemon.json编写以下内容：</p><p>{</p><p>“registry-mirrors” : [</p><p>“<a href="https://8xpk5wnt.mirror.aliyuncs.com&quot;">https://8xpk5wnt.mirror.aliyuncs.com&quot;</a></p><p>]</p><p>}</p><p><img src="/.com//wps90.jpg" alt="img"> </p><p>（5）启动docker</p><p>1）关闭防火墙：systemctl stop firewalld</p><p>2）禁止开机启动防火墙：systemctl disable firewalld</p><p>3）查看防火墙状态：systemctl status firewalld</p><p><img src="/.com//wps91.jpg" alt="img"> </p><p>通过命令启动docker：</p><p>systemctl start docker  启动docker服务</p><p>systemctl stop docker  停止docker服务</p><p>systemctl restart docker  重启docker服务</p><p><img src="/.com//wps92.jpg" alt="img"> </p><p>docker配置文件重新加载：systemctl daemon-reload</p><p>设置开启自启动：systemctl enable docker</p><p>（6）查看docker信息：docker info</p><p><img src="/.com//wps93.jpg" alt="img"> </p><p>（7）显示当前正在运行的容器：docker ps</p><p><img src="/.com//wps94.jpg" alt="img"> </p><p>（8）docker镜像：docker images</p><p><img src="/.com//wps95.jpg" alt="img"> </p><p>（9）docker版本：docker version</p><p>docker-client</p><p>which docker</p><p><img src="/.com//wps96.jpg" alt="img"> </p><p>docker daemon，运行在docker host上，负责创建、运行、监控容器、构建、存储镜像</p><p>ps aux |grep docker</p><p><img src="/.com//wps97.jpg" alt="img"> </p><p>containerd</p><p>ps aux|grep containerd</p><p>systemctl status containerd</p><p><img src="/.com//wps98.jpg" alt="img">  </p><p><strong><em>\</em>docker的基本操作**</strong></p><ol><li>启动第一个docker容器</li></ol><p>Nginx web服务器，运行一个80端口的网站</p><p>在宿主机上，运行Nginx</p><p>开启服务器</p><p>2.在服务器上安装好运行nginx所需的依赖关系</p><p>3.安装nginx yum install nginx -y</p><p>4.修改nginx配置文件</p><p>5.启动nginx</p><p>6.客户端去访问nginx</p><p>（1）查看本地的docker镜像有哪些：docker image ls 或 docker images</p><p><img src="/.com//wps99.jpg" alt="img"> </p><p>（2）可选择删除旧版本：docker rmi 镜像id</p><p>（3）搜索一下远程仓库中的镜像文件是否存在：docker search nginx</p><p><img src="/.com//wps100.jpg" alt="img"> </p><p>（4）docker pull nginx</p><p><img src="/.com//wps101.jpg" alt="img"> </p><p>（5）再次查看镜像：docker images</p><p><img src="/.com//wps102.jpg" alt="img"> </p><p>（6）运行镜像，运行出具体内容，在容器中就跑着一个nginx服务，docker run 参数 镜像的名字/id</p><p>-d 后台运行容器</p><p>-p 80:80 端口映射，宿主机端口：容器内端口，访问宿主机的80端口，也就访问到容器中的80端口，会返回一个容器的id</p><p>docker run -d -p 80:80 nginx</p><p><img src="/.com//wps103.jpg" alt="img"> </p><p>（7）查看容器是否在运行：docker ps</p><p><img src="/.com//wps104.jpg" alt="img"> </p><p>（8）访问网站192.168.88.163:80</p><p><img src="/.com//wps105.jpg" alt="img"> </p><p>（9）停止容器：docker stop 容器id</p><p><img src="/.com//wps106.jpg" alt="img"> </p><p>（10）恢复容器：docker start 容器id</p><p><img src="/.com//wps107.jpg" alt="img">  </p><p><strong><em>\</em>docker镜像原理**</strong></p><p>（1）查看发行版： cat /etc/redhat-release </p><p><img src="/.com//wps108.jpg" alt="img"> </p><p>（2）查看内核：uname -r</p><p><img src="/.com//wps109.jpg" alt="img"> </p><p>（3）利用docker获取不同的发行版镜像（例如centos：7.8.2003）：docker pull centos:7.8.2003</p><p><img src="/.com//wps110.jpg" alt="img"> </p><p>（4）确认当前宿主机的发行版：cat /etc/redhat-release</p><p><img src="/.com//wps111.jpg" alt="img"> </p><p>（5）运行centos:7.8.2003发行版本</p><p>运行容器，且进入容器内部</p><p>参数解释，-i 交互式命令操作 -t 开启一个终端 bash 进入容器后执行的命令</p><p>docker run -it afb6fca791e0 bash</p><p><img src="/.com//wps112.jpg" alt="img"> </p><p>（6）退出容器空间：exit</p><p><strong><em>\</em>获取镜像**</strong></p><p>（1）docker search 镜像名:tag tag就是具体的标签版本：docker search centos</p><p><img src="/.com//wps113.jpg" alt="img"> </p><p>（2）查看docker镜像的存储路径：docker info |grep Root</p><p><img src="/.com//wps114.jpg" alt="img"> </p><p>（3）具体位置：ls /var/lib/docker/image/overlay2/imagedb/content/sha256</p><p><img src="/.com//wps115.jpg" alt="img"> </p><p>（4）使用不同的镜像，生成容器# -it 开启一个交互式的终端–rm 容器退出时删除该容器</p><p>再运行一个7.8centos</p><p>docker run -it –rm centos bash</p><p><strong><em>\</em>查看镜像**</strong></p><p>（1）查看所有镜像：docker images</p><p><img src="/.com//wps116.jpg" alt="img"> </p><p>（2）指定tag查看：docker images centos:7.8.2003</p><p><img src="/.com//wps117.jpg" alt="img"> </p><p>（3）只列出镜像id  #-q –quiet 只列出id：docker images -q</p><p><img src="/.com//wps118.jpg" alt="img"> </p><p>（4）格式化显示镜像</p><p> 这是docker的模板语言，–format{docker images –format “–“}</p><p><img src="/.com//wps119.jpg" alt="img"> </p><p><strong><em>\</em>删除镜像**</strong></p><p>（1）删除容器记录：docker rm 容器id</p><p>（2）指定id的前三位即可：docker rmi 镜像id</p><p><strong><em>\</em>镜像管理**</strong></p><p>（1）批量删除镜像，慎用：docker rmi ‘docker images -aq’</p><p>（2）批量删除容器：docker rm ‘docker ps -aq’</p><p>（3）导出镜像：docker save -o nginx.tgz nginx:latest#打包tar包</p><p>（4）导入镜像：</p><p>①先删除本地的nginx镜像：docker rmi centos:7.8.2003</p><p>②docker image load -i /export/software/centos1.8.2003.tgz#重新加载nginx-tar包</p><p>③查看cocker服务的信息：docker info</p><p><img src="/.com//wps120.jpg" alt="img"> </p><p>④查看镜像详细信息：docker image inspact 镜像id</p><p><strong><em>\</em>docker镜像管理练习**</strong></p><p>（1）去DockerHub搜索Redies</p><p>（2）利用docker pull命令拉去镜像：docker pull redis</p><p><img src="/.com//wps121.jpg" alt="img"> </p><p>（3）查看Redies镜像的名称和版本：docker search redis</p><p><img src="/.com//wps122.jpg" alt="img"> </p><p>（4）利用docker save命令将redies:latest打包为一个redies.tar包</p><p>docker save -o redis.tar redis:latest</p><p><img src="/.com//wps123.jpg" alt="img"> </p><p>（5）利用docker rmi删除本地的redis:latest </p><p>docker rmi redis:latest</p><p><img src="/.com//wps124.jpg" alt="img"> </p><p>（6）利用docker load重新加载Redis.tar文件</p><p>docker load -i redis.tar</p><p><img src="/.com//wps125.jpg" alt="img"> </p><p><strong><em>\</em>容器操作**</strong></p><ol><li>创建并运行mn容器</li></ol><p>docker run –name mn -p 80:80 -d nginx</p><p><img src="/.com//wps126.jpg" alt="img"> </p><ol start="2"><li>运行刚刚创建的nginx容器</li></ol><p>docker exec -it mn bash</p><p><img src="/.com//wps127.jpg" alt="img"> </p><ol start="3"><li>进入nginx的HTML所在目录 /usr/share/nginx/html</li></ol><p>cd /usr/share/nginx/html</p><p><img src="/.com//wps128.jpg" alt="img"> </p><ol start="4"><li>修改index.html的内容</li></ol><p>sed -i -e ‘s#Welcome to nginx#人工智能学院欢迎您#g’ -e ‘s#<head>#<head><meta charset="utf-8">#g’ index.html</head></head></p><p><img src="/.com//wps129.jpg" alt="img"> </p><p><strong><em>\</em>创建和查看数据卷**</strong></p><ol><li>创建数据卷</li></ol><p>docker volume create html</p><p><img src="/.com//wps130.jpg" alt="img"> </p><ol start="2"><li>查看所有数据</li></ol><p>docker volume ls</p><p><img src="/.com//wps131.jpg" alt="img"> </p><ol start="3"><li>查看数据卷详细信息卷</li></ol><p>docker volume inspect html</p><p><img src="/.com//wps132.jpg" alt="img"> </p><ol start="4"><li>挂载数据卷</li></ol><p>（1）创建容器并挂载数据卷到容器内的HTML目录，把/export/data/docker-data/nginx-html/数据卷挂载到容器内的/user/share/nginx/html目录中：</p><p>docker run –name mn -v /export/data/docker-data/nginx-html/:/usr/share/nginx/html -p 80:80 -d nginx</p><p>（2）进入html数据卷所在位置，并修改HTML内容</p><p>查看html数据卷的位置：</p><p>docker volume inspect /export/data/docker-data/nginx-html/</p><p>（3）进入该目录</p><p>cd /export/data/docker-data/nginx-html/_data</p><p>（4）修改文件vi index.html</p><p><strong><em>\</em>Docker应用部署**</strong></p><ol><li>搜索mysql镜像：docker search mysql</li></ol><p><img src="/.com//wps133.jpg" alt="img"> </p><ol start="2"><li>拉取mysql镜像</li></ol><p>docker pull mysql:5.6</p><p><img src="/.com//wps134.jpg" alt="img"> </p><ol start="3"><li>创建容器，设置端口映射、目录映射</li></ol><p>mkdir -p /export/data/docker-data/mysql</p><p>cd /export/data/docker-data/mysql</p><p>docker run -id \</p><p>-p 3306:3306 \</p><p>–name=bigdata_mysql \</p><p>-v $PWD/conf:/etc/mysql/conf.d \</p><p>-v $PWD/logs:/logs \</p><p>-v $PWD/data:/var/lib/mysql \</p><p>-e MYSQL_ROOT_PASSWORD=hadoop \</p><p>mysql:5.7.29</p><p><img src="/.com//wps135.jpg" alt="img"> </p><ol start="4"><li>进入容器，操作mysql</li></ol><p>docker exec –it bigdata_mysql /bin/bash</p><p><img src="/.com//wps136.jpg" alt="img"> </p><ol start="5"><li>使用外部机器连接容器中的mysql</li></ol><p><img src="/.com//wps137.jpg" alt="img"> </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;（1）卸载（可选）&lt;/p&gt;
+&lt;p&gt;如果之前安装过旧版本的Docker，可以使用下面命令卸载：&lt;/p&gt;
+&lt;p&gt;yum remove docker &#92;&lt;/p&gt;
+&lt;p&gt;​         docker-client &#92;&lt;/p&gt;
+&lt;p&gt;​         docker-client</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="http://example.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="搭建" scheme="http://example.com/tags/%E6%90%AD%E5%BB%BA/"/>
+    
+    <category term="spark" scheme="http://example.com/tags/spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git安装</title>
+    <link href="http://example.com/wiki/Git%E5%AE%89%E8%A3%85/"/>
+    <id>http://example.com/wiki/Git%E5%AE%89%E8%A3%85/</id>
+    <published>2023-06-07T11:12:33.000Z</published>
+    <updated>2023-06-09T01:12:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>（1）Git下载</p><p>核心程序</p><p><img src="/.com//wps49.jpg" alt="img"></p><p>（2）可视化客户端</p><p><img src="/.com//wps50.jpg" alt="img"></p><p> 中文语言包</p><p><img src="/.com//wps51.jpg" alt="img"></p><p> （3）初始化仓库</p><p><img src="/.com//wps52.jpg" alt="img"></p><p><img src="/.com//wps53.jpg" alt="img"></p><p> （4）添加文件，提交文件至本地仓库</p><p><img src="/.com//wps54.jpg" alt="img"></p><p> （5）本地删除与恢复</p><p>文件选中删除，可用以下方式还原</p><p><img src="/.com//wps55.jpg" alt="img"></p><p> （6）创建分支</p><p><img src="/.com//wps56.jpg" alt="img"></p><p><img src="/.com//wps57.jpg" alt="img"></p><p> （7）分支的查看切换</p><p><img src="/.com//wps58.jpg" alt="img"></p><p><img src="/.com//wps59.jpg" alt="img"></p><p><img src="/.com//wps60.jpg" alt="img"></p><p>（8）标签的创建</p><p><img src="/.com//wps61.jpg" alt="img"></p><p><img src="/.com//wps62.jpg" alt="img"></p><p>（9）切换与删除</p><p><img src="/.com//wps63.jpg" alt="img"></p><p><img src="/.com//wps64.jpg" alt="img"></p><p>通过右键选中删除</p><p><strong><em>\</em>远程仓库**</strong></p><p><img src="/.com//wps65.jpg" alt="img"></p><p><img src="/.com//wps66.jpg" alt="img"></p><p>（1）码云账号注册 </p><p><img src="/.com//wps67.jpg" alt="img"></p><p>填写邮箱发送验证码,然后可以注册账号,主页如下</p><p><img src="/.com//wps68.jpg" alt="img"></p><p>（2）创建远程仓库</p><p><img src="/.com//wps69.jpg" alt="img"></p><p>（3）把本地代码推送到远端</p><p><img src="/.com//wps70.jpg" alt="img"></p><p><img src="/.com//wps71.jpg" alt="img"></p><p>生成公钥私钥</p><p>ssh-keygen -t rsa</p><p>一直回车</p><p>会默认用户目录 .ssh 目录生成一个默认的id_rsa文件 和id_rsa.pub</p><p>密钥配置 </p><p><img src="/.com//wps72.jpg" alt="img"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;（1）Git下载&lt;/p&gt;
+&lt;p&gt;核心程序&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/.com//wps49.jpg&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;p&gt;（2）可视化客户端&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/.com//wps50.jpg&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;p&gt;</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="http://example.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="搭建" scheme="http://example.com/tags/%E6%90%AD%E5%BB%BA/"/>
+    
+    <category term="spark" scheme="http://example.com/tags/spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hive安装</title>
+    <link href="http://example.com/wiki/hive%E5%AE%89%E8%A3%85/"/>
+    <id>http://example.com/wiki/hive%E5%AE%89%E8%A3%85/</id>
+    <published>2023-06-07T10:36:00.000Z</published>
+    <updated>2023-06-09T01:13:04.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong><em>\</em>（1）*<em>**</em></strong>*Mysql安装****</p><p>1）卸载Centos7自带的mariadb</p><p><img src="/.com//wps1.jpg" alt="img"></p><p>如果出现了mariadb-libs-5.5.64-1.el7.x86_64，输入rpm -e mariadb- libs-5.5.64-1.el7.x86_64 –nodeps,在输入rpm -qa|grep mariadb，即可</p><p>2）安装mysql</p><p>新建文件夹：mkdir /export/server/mysql</p><p>上传mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar到上述文件夹下，解压tar xvf mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar</p><p><img src="/.com//wps2.jpg" alt="img"> </p><p>3）执行安装</p><p>yum -y install libaio</p><p><img src="/.com//wps3.jpg" alt="img"> </p><p><img src="/.com//wps4.jpg" alt="img"> </p><p>4）mysql初始化设置</p><p>初始化：mysqld –initialize</p><p>更改所属组：chown mysql:mysql /var/lib/mysql -R</p><p>启动mysql：systemctl start mysqld.service</p><p><img src="/.com//wps5.jpg" alt="img"> </p><p>查看临时生成的root密码：cat  /var/log/mysqld.log</p><p><img src="/.com//wps6.jpg" alt="img"> </p><p>5）修改root密码 授权远程访问 设置开机自启动</p><p><img src="/.com//wps7.jpg" alt="img"> </p><p>修改root密码 设置为hadoop</p><p><img src="/.com//wps8.jpg" alt="img"> </p><p>授权</p><p>use mysql;</p><p>GRANT ALL PRIVILEGES ON <em>.</em> TO ‘root‘@’%’ IDENTIFIED BY ‘hadoop’ WITH GRANT OPTION;</p><p>FLUSH PRIVILEGES;</p><p><img src="/.com//wps9.jpg" alt="img"> </p><p>mysql的启动和关闭 状态查看 （这几个命令必须记住）</p><p>systemctl stop mysqld</p><p>systemctl status mysqld</p><p>systemctl start mysqld</p><p>设置开机自动启动：systemctl enable  mysqld </p><p>查看是否设置自动启动成功</p><p><img src="/.com//wps10.jpg" alt="img"> </p><p><strong><em>\</em>（2）*<em>**</em></strong>*H*<strong>**</strong>*ive*<strong>**</strong>*的安装****</p><p>1）上传安装包 解压</p><p>tar zxvf apache-hive-3.1.2-bin.tar.gz</p><p>ln -s apache-hive-3.1.2-bin hive</p><p>2）解决Hive与Hadoop之间guava版本差异</p><p>cd /export/server/hive/</p><p>rm -rf lib/guava-19.0.jar</p><p>cp /export/server/hadoop/share/hadoop/common/lib/guava-27.0-jre.jar</p><p> ./lib/</p><p><img src="/.com//wps11.jpg" alt="img"> </p><p>3）修改配置文件</p><p>hive-env.sh</p><p>cd /export/server/hive/conf</p><p>mv hive-env.sh.template hive-env.sh</p><p>vim hive-env.sh</p><p>export HADOOP_HOME=/export/server/hadoop</p><p>export HIVE_CONF_DIR=/export/server/hive/conf</p><p>export HIVE_AUX_JARS_PATH=/export/server/hive/lib</p><p><img src="/.com//wps12.jpg" alt="img"> </p><p><img src="/.com//wps13.jpg" alt="img"> </p><p>hive-site.xml</p><p>vim hive-site.xml</p><configuration><br><br><!-- 存储元数据mysql相关配置 --><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionURL</name><br><br>​    <value>jdbc:mysql://node1:3306/hive3?createDatabaseIfNotExist=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8</value><br><br></property><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionDriverName</name><br><br>​    <value>com.mysql.jdbc.Driver</value><br><br></property><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionUserName</name><br><br>​    <value>root</value><br><br></property><br><br><property><br><br>​    <name>javax.jdo.option.ConnectionPassword</name><br><br>​    <value>hadoop</value><br><br></property><br><br><!-- H2S运行绑定host --><br><br><property><br><br>  <name>hive.server2.thrift.bind.host</name><br><br>  <value>node1</value><br><br></property><br><br><!-- 远程模式部署metastore metastore地址 --><br><br><property><br><br>  <name>hive.metastore.uris</name><br><br>  <value>thrift://node1:9083</value><br><br></property><br><br><!-- 关闭元数据存储授权  --><br><br><property><br><br>  <name>hive.metastore.event.db.notification.api.auth</name><br><br>  <value>false</value><br><br></property><br><br></configuration><p>4）上传mysql jdbc驱动到hive安装包lib下</p><p>mysql-connector-java-5.1.32.jar</p><p><img src="/.com//wps14.jpg" alt="img"> </p><p>5）初始化元数据</p><p>cd /export/server/hive/</p><p>bin/schematool -initSchema -dbType mysql -verbos</p><p>初始化成功之后会在MySQL中创建74张表</p><p><img src="/.com//wps15.jpg" alt="img"> </p><p>6）在hdfs创建hive存储目录（如存在则不用操作）</p><p>hadoop fs -mkdir /tmp</p><p>hadoop fs -mkdir -p /user/hive/warehouse</p><p>hadoop fs -chmod g+w /tmp</p><p>hadoop fs -chmod g+w /user/hive/warehouse</p><p>7）启动hive</p><p><strong><em>\</em>（*<em>**</em></strong>*3）*<strong>**</strong>*启动metastore服务**** 前台启动  关闭ctrl+c</p><p>/export/server/hive/bin/hive –service metastore</p><p><img src="/.com//wps16.jpg" alt="img"> </p><p>前台启动开启debug日志</p><p>/export/server/hive/bin/hive –service metastore –hiveconf hive.root.logger=DEBUG,console  </p><p><img src="/.com//wps17.jpg" alt="img"> </p><p>后台启动 进程挂起  关闭使用jps+ kill -9</p><p>nohup /export/server/hive/bin/hive –service metastore &amp;</p><p><img src="/.com//wps18.jpg" alt="img"> </p><p><strong><em>\</em>（*<em>**</em></strong>*4）*<strong>**</strong>*启动hiveserver2服务****</p><p>nohup /export/server/hive/bin/hive –service hiveserver2 &amp;</p><p><img src="/.com//wps19.jpg" alt="img"> </p><p><img src="/.com//wps20.jpg" alt="img"> </p><p>beeline客户端连接</p><p>拷贝node1安装包到beeline客户端机器上（node3）</p><p>scp -r /export/server/apache-hive-3.1.2-bin/ root@node3:/export/server/</p><p><strong><em>\</em>（5）*<em>**</em></strong>*hive注释信息中文乱码解决****</p><p>以下sql语句均在mysql数据库中执行</p><p>use hivenode2;</p><p>show tables;</p><p>alter table hivenode2.COLUMNS_V2 modify column COMMENT varchar(256) character set utf8;</p><p>alter table hivenode2.TABLE_PARAMS modify column PARAM_VALUE varchar(4000) character set utf8;</p><p>alter table hivenode2.PARTITION_PARAMS modify column PARAM_VALUE varchar(4000) character set utf8 ;</p><p>alter table hivenode2.PARTITION_KEYS modify column PKEY_COMMENT varchar(4000) character set utf8;</p><p>alter table hivenode2.INDEX_PARAMS modify column PARAM_VALUE varchar(4000) character set utf8;</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;strong&gt;&lt;em&gt;&#92;&lt;/em&gt;（1）*&lt;em&gt;**&lt;/em&gt;&lt;/strong&gt;*Mysql安装****&lt;/p&gt;
+&lt;p&gt;1）卸载Centos7自带的mariadb&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/.com//wps1.jpg&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;p&gt;如</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="http://example.com/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="搭建" scheme="http://example.com/tags/%E6%90%AD%E5%BB%BA/"/>
+    
+    <category term="spark" scheme="http://example.com/tags/spark/"/>
     
   </entry>
   
