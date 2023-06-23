@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    
+    <title>kafka环境配置 | Hexo</title>
+    
+    
+        <meta name="keywords" content="搭建,kafka">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="zookeeper安装安装前需要安装好jdk，检测集群时间是否同步，检测防火墙是否关闭，检测主机 ip映射有没有配置 （1）在node1上切换到 &#x2F;export&#x2F;server 目录下，上传zookeeper压缩包并解压，设置一个软连接。 切换到server目录下： 1cd &#x2F;export&#x2F;server 解压zookeeper压缩包： 1tar -zxvf zookeeper.tar.gz -C &#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka环境配置">
+<meta property="og:url" content="http://example.com/wiki/kafka%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="zookeeper安装安装前需要安装好jdk，检测集群时间是否同步，检测防火墙是否关闭，检测主机 ip映射有没有配置 （1）在node1上切换到 &#x2F;export&#x2F;server 目录下，上传zookeeper压缩包并解压，设置一个软连接。 切换到server目录下： 1cd &#x2F;export&#x2F;server 解压zookeeper压缩包： 1tar -zxvf zookeeper.tar.gz -C &#x2F;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/.com//wps1.jpg">
+<meta property="og:image" content="http://example.com/.com//wps2.jpg">
+<meta property="og:image" content="http://example.com/.com//wps3.jpg">
+<meta property="og:image" content="http://example.com/.com//wps4.jpg">
+<meta property="og:image" content="http://example.com/.com//wps5.jpg">
+<meta property="og:image" content="http://example.com/.com//wps6.jpg">
+<meta property="og:image" content="http://example.com/.com//wps7.jpg">
+<meta property="og:image" content="http://example.com/.com//wps8.jpg">
+<meta property="og:image" content="http://example.com/.com//wps9.jpg">
+<meta property="og:image" content="http://example.com/.com//wps10.jpg">
+<meta property="og:image" content="http://example.com/.com//wps11.jpg">
+<meta property="og:image" content="http://example.com/.com//wps12.jpg">
+<meta property="og:image" content="http://example.com/.com//wps13.jpg">
+<meta property="og:image" content="http://example.com/.com//wps14.jpg">
+<meta property="og:image" content="file:///C:/Users/ADMINI~1/AppData/Local/Temp/ksohtml18224/wps15.jpg">
+<meta property="og:image" content="http://example.com/.com//wps16.jpg">
+<meta property="og:image" content="http://example.com/.com//wps17.jpg">
+<meta property="og:image" content="http://example.com/.com//wps18.jpg">
+<meta property="og:image" content="http://example.com/.com//wps19.jpg">
+<meta property="og:image" content="http://example.com/.com//wps20.jpg">
+<meta property="og:image" content="http://example.com/.com//wps21.jpg">
+<meta property="og:image" content="http://example.com/.com//wps22.jpg">
+<meta property="og:image" content="http://example.com/.com//wps23.jpg">
+<meta property="og:image" content="http://example.com/.com//wps24.jpg">
+<meta property="og:image" content="http://example.com/.com//wps25.jpg">
+<meta property="og:image" content="http://example.com/.com//wps26.jpg">
+<meta property="og:image" content="http://example.com/.com//wps27.jpg">
+<meta property="og:image" content="http://example.com/.com//wps28.jpg">
+<meta property="og:image" content="http://example.com/.com//wps29.jpg">
+<meta property="og:image" content="http://example.com/.com//wps30.jpg">
+<meta property="og:image" content="http://example.com/.com//wps31.jpg">
+<meta property="og:image" content="http://example.com/.com//wps32.jpg">
+<meta property="og:image" content="http://example.com/.com//wps33.jpg">
+<meta property="og:image" content="http://example.com/.com//wps34.jpg">
+<meta property="og:image" content="http://example.com/.com//wps35.jpg">
+<meta property="og:image" content="http://example.com/.com//wps36.jpg">
+<meta property="og:image" content="http://example.com/.com//wps37.jpg">
+<meta property="og:image" content="http://example.com/.com//wps38.jpg">
+<meta property="og:image" content="http://example.com/.com//wps39.jpg">
+<meta property="og:image" content="http://example.com/.com//wps40.jpg">
+<meta property="og:image" content="http://example.com/.com//wps41.jpg">
+<meta property="og:image" content="http://example.com/.com//wps42.jpg">
+<meta property="og:image" content="http://example.com/.com//wps43.jpg">
+<meta property="article:published_time" content="2023-06-16T01:00:50.000Z">
+<meta property="article:modified_time" content="2023-06-19T01:29:18.000Z">
+<meta property="article:author" content="liuzhiyu">
+<meta property="article:tag" content="搭建">
+<meta property="article:tag" content="kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/.com//wps1.jpg">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/favicon.ico">
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/open-sans/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+<script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Hexo</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/images/T.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/images/T.png">
+            <h2 id="name">liuzhiyu2001</h2>
+            <h3 id="title">Designer &amp; Programmer</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Chengdu, China</span>
+            <a id="follow" target="_blank" href="https://github.com/liuzhiyyu2001/" rel="external nofollow noopener noreferrer">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                13
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                3
+                <span>tags</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/liuzhiyu2001/liuzhiyu2001.github.io" target="_blank" title="github" class="tooltip" rel="external nofollow noopener noreferrer">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://stackoverflow.com/users/7277090/liuzhiyu2001?tab=profile" target="_blank" title="stack-overflow" class="tooltip" rel="external nofollow noopener noreferrer">
+                            <i class="fa fa-stack-overflow"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://codepen.io/liuzhiyu2001/" target="_blank" title="codepen" class="tooltip" rel="external nofollow noopener noreferrer">
+                            <i class="fa fa-codepen"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/atom.xml" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            工具
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/hive%E5%AE%89%E8%A3%85/">hive安装</a></li>  <li class="file"><a href="/wiki/Git%E5%AE%89%E8%A3%85/">Git安装</a></li>  <li class="file"><a href="/wiki/Docker%E5%AE%89%E8%A3%85/">Docker安装</a></li>  <li class="file"><a href="/wiki/Spark-local%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/">Spark-local环境部署</a></li>  <li class="file"><a href="/wiki/Spark-StandAlone%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/">Spark-StandAlone环境部署</a></li>  <li class="file"><a href="/wiki/Spark-HA%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2/">Spark-HA环境部署</a></li>  <li class="file"><a href="/wiki/YARN%E6%A8%A1%E5%BC%8F/">YARN模式</a></li>  <li class="file"><a href="/wiki/pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83/">pyspark基础编码环境</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            工具2
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file active"><a href="/wiki/kafka%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">kafka环境配置</a></li>  <li class="file"><a href="/wiki/kafka%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9C/">kafka命令行操作</a></li>  <li class="file"><a href="/wiki/kafkaAPI%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95/">kafkaAPI操作方法</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            工具3
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/kafka-Eagle%E7%9A%84%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">kafka-Eagle的部署与基本操作</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/hello-world/">Hello World</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-kafka环境配置" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E5%B7%A5%E5%85%B72/">工具2</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/kafka/" rel="tag">kafka</a>, <a class="tag-link-link" href="/tags/%E6%90%AD%E5%BB%BA/" rel="tag">搭建</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/kafka%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
+            <time datetime="2023-06-16T01:00:50.000Z" itemprop="datePublished">2023-06-16</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/liuzhiyu2001/git@github.com:liuzhiyu2001/liuzhiyu2001.github.io.git/raw/master/source/_posts/kafka环境配置.md"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/liuzhiyu2001/git@github.com:liuzhiyu2001/liuzhiyu2001.github.io.git/edit/master/source/_posts/kafka环境配置.md"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/liuzhiyu2001/git@github.com:liuzhiyu2001/liuzhiyu2001.github.io.git/commits/master/source/_posts/kafka环境配置.md"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            kafka环境配置
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+        
+        
+            <h2 id="zookeeper安装"><a href="#zookeeper安装" class="headerlink" title="zookeeper安装"></a><strong>zookeeper安装</strong></h2><p>安装前需要安装好jdk，检测集群时间是否同步，检测防火墙是否关闭，检测主机 ip映射有没有配置</p>
+<p>（1）在node1上切换到 /export/server 目录下，上传zookeeper压缩包并解压，设置一个软连接。</p>
+<p>切换到server目录下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /export/server</span><br></pre></td></tr></table></figure>
+<p>解压zookeeper压缩包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf zookeeper.tar.gz -C /export/server/  </span><br></pre></td></tr></table></figure>
+<p>设置软连接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s  /export/server/zookeeper-3.4.6/ zookeeper</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps1.jpg" alt="img"> </p>
+<ol>
+<li>修改环境变量（三台都修改）</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> ZOOKEEPER_HOME=/export/server/zookeeper</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$ZOOKEEPER_HOME</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps2.jpg" alt="img"> </p>
+<ol start="2">
+<li><p>修改zookeeper配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/zookeeper/conf/  切换到conf/目录下</span><br><span class="line"></span><br><span class="line">cp zoo_sample.cfg zoo.cfg  复制zoo_sample.cfg文件，文件名为zoo.cfg</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="/.com//wps3.jpg" alt="img">  </p>
+<p>创建文件:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /export/data/zookeeper/zkdatas/   </span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps4.jpg" alt="img"> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim zoo.cfg </span><br></pre></td></tr></table></figure>
+<p>填充以下内容：</p>
+<p>#Zookeeper的数据存放目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dataDir = /export/data/zookeeper/zkdatas/</span><br></pre></td></tr></table></figure>
+<p># 保留多少个快照</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">autopurge.snapRetainCount = 3</span><br></pre></td></tr></table></figure>
+<p># 日志多少小时清理一次</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">autopurge.purgeInterval = 1</span><br></pre></td></tr></table></figure>
+<p># 集群中服务器地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server.1 =node1:2888:3888</span><br><span class="line"></span><br><span class="line">server.2 = node2:2888:3888</span><br><span class="line"></span><br><span class="line">server.3 = node3:2888:3888</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps5.jpg" alt="img"> </p>
+<ol start="3">
+<li>添加myid配置</li>
+</ol>
+<p>在node1主机的/export/server/zookeeper/zkdatas/这个路径下创建一个文件，文件名为myid ,文件内容为1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 1 &gt; /export/data/zookeeper/zkdatas/myid </span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps6.jpg" alt="img"> </p>
+<ol start="4">
+<li>安装包分发并修改myid的值</li>
+</ol>
+<p>在node1主机上，将安装包分发到其他机器</p>
+<p>第一台机器上面执行以下两个命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /export/server/</span><br><span class="line"></span><br><span class="line">scp -r /export/server/zookeeper-3.4.6/ root@node2:/export/server/  </span><br><span class="line"></span><br><span class="line">scp -r /export/server/zookeeper-3.4.6/ root@node3:/export/server/  </span><br></pre></td></tr></table></figure>
+<p>  建立软连接（node2 node3）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s zookeeper-3.4.6/ zookeeper</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps7.jpg" alt="img"> </p>
+<p><img src="/.com//wps8.jpg" alt="img"> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 2 &gt; /export/data/zookeeper/zkdatas/myid  （node2上执行）</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps9.jpg" alt="img"> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 3 &gt; /export/data/zookeeper/zkdatas/myid  （node3上执行）</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps10.jpg" alt="img"> </p>
+<ol start="5">
+<li><p>三台机器启动zookeeper服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">（1）/export/server/zookeeper/bin/zkServer.sh start</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="/.com//wps11.jpg" alt="img"> </p>
+<p><img src="/.com//wps12.jpg" alt="img"> </p>
+<p><img src="/.com//wps13.jpg" alt="img"> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">（2）/export/server/zookeeper/bin/zkServer.sh status 三台主机分别查看启动状态</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps14.jpg" alt="img"><img src="file:///C:\Users\ADMINI~1\AppData\Local\Temp\ksohtml18224\wps15.jpg" alt="img"> </p>
+<p><img src="/.com//wps16.jpg" alt="img"> </p>
+<ol start="6">
+<li>编写一个脚本批量启动node1，2，3的zookeeper</li>
+</ol>
+<p>（1）创建shell目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /export/shell</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps17.jpg" alt="img"> </p>
+<p>（2）再此目录下建立一个zkall.sh文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim zkall.sh</span><br></pre></td></tr></table></figure>
+<p>添加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">case $1 in</span><br><span class="line"></span><br><span class="line">&quot;start&quot;)&#123;</span><br><span class="line"></span><br><span class="line">​	for i in node1 node2 node3</span><br><span class="line"></span><br><span class="line">do</span><br><span class="line"></span><br><span class="line">​		echo ---------- zookeeper $i 启动 ------------</span><br><span class="line"></span><br><span class="line">​		ssh $i &quot;/export/server/zookeeper/bin/zkServer.sh start&quot;</span><br><span class="line"></span><br><span class="line">​	done</span><br><span class="line"></span><br><span class="line">&#125;;;</span><br><span class="line"></span><br><span class="line">&quot;stop&quot;)&#123;</span><br><span class="line"></span><br><span class="line">​	for i in node1 node2 node3</span><br><span class="line"></span><br><span class="line">​	do</span><br><span class="line"></span><br><span class="line">​		echo ---------- zookeeper $i 停止 ------------ </span><br><span class="line"></span><br><span class="line">​		ssh $i &quot;/export/server/zookeeper/bin/zkServer.sh stop&quot;</span><br><span class="line"></span><br><span class="line">​	done</span><br><span class="line"></span><br><span class="line">&#125;;;</span><br><span class="line"></span><br><span class="line">&quot;status&quot;)&#123;</span><br><span class="line"></span><br><span class="line">​	for i in node1 node2 node3</span><br><span class="line"></span><br><span class="line">​	do</span><br><span class="line"></span><br><span class="line">​		echo ---------- zookeeper $i 状态 ------------ </span><br><span class="line"></span><br><span class="line">​		ssh $i &quot;/export/server/zookeeper/bin/zkServer.sh status&quot;</span><br><span class="line"></span><br><span class="line">​	done</span><br><span class="line"></span><br><span class="line">&#125;;;</span><br><span class="line"></span><br><span class="line">Esac</span><br></pre></td></tr></table></figure>
+<p>（3）配置zk脚本环境变量、zookeeper的环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br></pre></td></tr></table></figure>
+<p>#ZOOKEEPER_SHELL_HOME</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">export ZKS_HOME=/export/shell/</span><br><span class="line"></span><br><span class="line">export PATH=$PATH:$ZKS_HOME</span><br><span class="line"></span><br><span class="line">export ZK_HOME=/export/server/zookeeper</span><br><span class="line"></span><br><span class="line">export PATH=$&#123;ZK_HOME&#125;/bin:$PATH</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps18.jpg" alt="img"> </p>
+<p>让环境变量生效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+<p>（4） 设置环境路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim .bashrc</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps19.jpg" alt="img"> </p>
+<p>（5）增加可执行权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x zkall.sh </span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps20.jpg" alt="img"> </p>
+<p>（6）启动测试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zkall.sh start</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps21.jpg" alt="img"> </p>
+<p>查看状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zkall.sh status</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps22.jpg" alt="img"> </p>
+<p>（7）zookeeper服务器常用命令</p>
+<p>启动 ZooKeeper 服务:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkServer.sh start</span><br></pre></td></tr></table></figure>
+<p>查看 ZooKeeper 服务状态:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkServer.sh status</span><br></pre></td></tr></table></figure>
+<p>停止 ZooKeeper 服务:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkServer.sh stop </span><br></pre></td></tr></table></figure>
+<p>重启 ZooKeeper 服务:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkServer.sh restart </span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li>Zookeerper命令操作</li>
+</ol>
+<p>（1）连接ZooKeeper服务端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkCli.sh -server node1:2181</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps23.jpg" alt="img"> </p>
+<h2 id="kafka安装"><a href="#kafka安装" class="headerlink" title="kafka安装"></a><strong><strong>kafka安装</strong></strong></h2><p>安装Kafka集群</p>
+<p>（1）上传安装包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /export/server/</span><br><span class="line">tar -zxvf kafka_2.12-2.4.1.tgz</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps24.jpg" alt="img"> </p>
+<ol>
+<li>修改配置文件</li>
+</ol>
+<p>修改文件内容</p>
+<p>#进入配置文件目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /export/server/kafka_2.12-2.4.1/config</span><br></pre></td></tr></table></figure>
+<p>#编辑配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi server.properties</span><br></pre></td></tr></table></figure>
+<p>#为依次增长的:0、1、2、3、4,集群中唯一 id – 从0开始，每台不能重复，第一块要改的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">broker.id=0 </span><br></pre></td></tr></table></figure>
+<p>#数据存储的目录，第二块要改的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log.dirs=/export/data/kafka-logs </span><br></pre></td></tr></table></figure>
+<p>#指定 zk 集群地址，第三块要改的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zookeeper.connect=node1:2181，</span><br><span class="line"></span><br><span class="line">node2:2181</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps25.jpg" alt="img"> </p>
+<p><img src="/.com//wps26.jpg" alt="img"> </p>
+<p><img src="/.com//wps27.jpg" alt="img"> </p>
+<p><img src="/.com//wps28.jpg" alt="img"> </p>
+<p>（2）分发kafla</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /export/server/</span><br><span class="line"></span><br><span class="line">syncfile /export/server/kafka_2.12-2.4.1</span><br></pre></td></tr></table></figure>
+<p>（3）配置环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> KAFKA_HOME=/export/server/kafka_2.12-2.4.1 </span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$KAFKA_HOME</span>/bin </span><br></pre></td></tr></table></figure>
+<p>注意:还需要分发环境变量！</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">syncfile /etc/profile</span><br></pre></td></tr></table></figure>
+<p>（4）在node2上修改配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /export/se</span><br><span class="line">rver/kafka_2.12-2.4.1/config/server.propertie</span><br></pre></td></tr></table></figure>
+<p>更改broker.id=1</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log.dirs=/export/data/kafka-logs</span><br></pre></td></tr></table></figure>
+<p>（5）启动集群（各个节点）</p>
+<p>启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-server-start.sh -daemon /export/server/kafka_2.12-2.4.1/config/server.properties</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps29.jpg" alt="img"> </p>
+<p>关闭：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-server-stop.sh stop</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps30.jpg" alt="img"> </p>
+<p><img src="/.com//wps31.jpg" alt="img"></p>
+<h2 id="Flume安装"><a href="#Flume安装" class="headerlink" title="Flume安装"></a><strong>Flume</strong>安装</h2><p>1、Flume安装</p>
+<p>（1）上传flume的压缩包到/export/software下。</p>
+<p><img src="/.com//wps32.jpg" alt="img"> </p>
+<p><img src="/.com//wps33.jpg" alt="img"> </p>
+<p>（2）解压到/export/server目录下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf apache-flume-1.9.0-bin.tar.gz -C /export/server/</span><br></pre></td></tr></table></figure>
+<p>同时设置软链接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s /export/server/apache-flume-1.9.0-bin/ flume</span><br></pre></td></tr></table></figure>
+<p>如下图所示：</p>
+<p><img src="/.com//wps34.jpg" alt="img"> </p>
+<p>（3）编辑/etc/profile，配置FLUME_HOME指向正确的路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#FLUME_HOME</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> FLUME_HOME=/export/server/flume</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$FLUME_HOME</span>/bin</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps35.jpg" alt="img"> </p>
+<p>（4）通过scp命令发送给其余机器，并设置软链接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">scp -r /export/server/apache-flume-1.9.0-bin root@node1:/export/server/</span><br><span class="line"></span><br><span class="line">scp -r /export/server/apache-flume-1.9.0-bin root@node3:/export/server/</span><br><span class="line"></span><br><span class="line"><span class="built_in">ln</span> -s /export/server/apache-flume-1.9.0-bin /export/server/flume</span><br></pre></td></tr></table></figure>
+<p>（5）添加配置文件</p>
+<p>在flume/myconf目录下添加配置文件netcat-logger.conf，添加如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># example1-netcat-logger.conf: 单节点Flume配置</span></span><br><span class="line"></span><br><span class="line">\<span class="comment"># 定义agent名称为a1</span></span><br><span class="line"></span><br><span class="line">\<span class="comment"># 设置3个组件的名称</span></span><br><span class="line"></span><br><span class="line">a1.sources = r1</span><br><span class="line"></span><br><span class="line">a1.sinks = k1</span><br><span class="line"></span><br><span class="line">a1.channels = c1</span><br><span class="line"></span><br><span class="line">\<span class="comment"># 配置source类型为NetCat,监听地址为本机，端口为44444</span></span><br><span class="line"></span><br><span class="line">a1.sources.r1.type = netcat</span><br><span class="line"></span><br><span class="line">a1.sources.r1.bind = 0.0.0.0</span><br><span class="line"></span><br><span class="line">a1.sources.r1.port = 44444</span><br><span class="line"></span><br><span class="line">\<span class="comment">#source和channel关联</span></span><br><span class="line"></span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line"></span><br><span class="line">\<span class="comment"># 配置channel类型为内存，内存队列最大容量为1000，一个事务中从source接收的Events数量或者发送给sink的Events数量最大为100</span></span><br><span class="line"></span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line"></span><br><span class="line">a1.channels.c1.capacity = 1000</span><br><span class="line"></span><br><span class="line">a1.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line">\<span class="comment"># 配置sink类型为Logger</span></span><br><span class="line"></span><br><span class="line">a1.sinks.k1.type = logger</span><br><span class="line"></span><br><span class="line">\<span class="comment"># 将sink绑定到channel上</span></span><br><span class="line"></span><br><span class="line">a1.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
+<p>（6）启动flume</p>
+<p>在/export/server/flume目录下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent -n a1 -c conf -f myconf/example1-netcat-logger.conf -Dflume.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps36.jpg" alt="img"> </p>
+<p>使用Netcat测试，复制node1标签，启动netcat连接到44444端口</p>
+<p><img src="/.com//wps37.jpg" alt="img"> </p>
+<p>可以看到agent控制台接收到信息。</p>
+<p><img src="/.com//wps38.jpg" alt="img"></p>
+<h2 id="sqoop安装"><a href="#sqoop安装" class="headerlink" title="sqoop安装"></a><strong>sqoop安装</strong></h2><p>（1）首先需要有java、mysql、hadoop和hive环境</p>
+<p>（2）将以下下载到CentOS系统中，对其解压</p>
+<p><img src="/.com//wps39.jpg" alt="img"> </p>
+<p>（3）解压在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/export/server/  tar xzf apache-flume-1.9.0-bin.tar.gz -C /export/server/</span><br></pre></td></tr></table></figure>
+<p>（4）添加软连接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s apache-flume-1.9.0-bin flume</span><br></pre></td></tr></table></figure>
+<p>（5）配置文件修改：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps40.jpg" alt="img"> </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi sqoop-env.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps41.jpg" alt="img"> </p>
+<p>（5）加入mysql的jdbc驱动包 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> /export/server/hive/lib/mysql-con</span><br><span class="line">nector-java-5.1.32.jar <span class="variable">$SQOOP_HOME</span>/lib/</span><br></pre></td></tr></table></figure>
+<p><img src="/.com//wps42.jpg" alt="img"> </p>
+<p>（7）验证启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> bin/sqoop list-databases --connect jdbc:mysql://node1:3306/ --usernam</span><br><span class="line"></span><br><span class="line">e root --password hadoop </span><br></pre></td></tr></table></figure>
+<p>本命令会列出所有mysql的数据库。 </p>
+<p>到这里，整个Sqoop安装工作完成。</p>
+<p><img src="/.com//wps43.jpg" alt="img"> </p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/wiki/kafka%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9C/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    kafka命令行操作
+                
+            </div>
+        </a>
+    
+    
+        <a href="/wiki/pyspark%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A0%81%E7%8E%AF%E5%A2%83/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">pyspark基础编码环境</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            liuzhiyu &copy; 2023 
+            <a rel="external nofollow noopener noreferrer" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/zthxxx/hexo-theme-Wikitten">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
